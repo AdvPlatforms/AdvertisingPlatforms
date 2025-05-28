@@ -40,11 +40,18 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
                 var advertisingInLocation = _advertisingInLocationRepository.GetByIdFromRepository(locationId);
 
                 return advertisingInLocation?.AdvertisingIds
-                    .Select(x=> _advertisingPlatformsService.GetById(x).Name)
+                    .Select(x => _advertisingPlatformsService.GetById(x).Name)
                     .ToList();
+            }
+            catch (InvalidOperationException ex)
+            {
+                //TODO
+                throw;
             }
             catch (Exception ex)
             {
+                var a = ex.GetType();
+
                 throw new BusinessException(
                     ErrorConstants.ServiceGetData,
                     ex);

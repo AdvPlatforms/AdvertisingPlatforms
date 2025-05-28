@@ -11,16 +11,16 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
     /// <typeparam name="TResource">Resource.</typeparam>
     public class Repository<TResource> where TResource: Resource
     {
-        public readonly FileRepository<TResource> FileRepository;
-        public readonly IRepositoryReader RepositoryReader;
-        protected readonly IRepositoryWriter _repositoryWriter;
+        private readonly FileRepository<TResource> _fileRepository;
+        private readonly IRepositoryReader _repositoryReader;
+        private readonly IRepositoryWriter _repositoryWriter;
         public Repository(IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
-            RepositoryReader = repositoryReader;
+            _repositoryReader = repositoryReader;
             _repositoryWriter = repositoryWriter;
 
             var filePath = GetFilePath();
-            FileRepository = new FileRepository<TResource>(filePath);
+            _fileRepository = new FileRepository<TResource>(filePath);
         }
 
         private static string GetFilePath()
@@ -40,7 +40,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity"></param>
         public void AddToRepository(TResource entity)
         {
-            FileRepository.AddToRepository(entity, RepositoryReader, _repositoryWriter);
+            _fileRepository.AddToRepository(entity, _repositoryReader, _repositoryWriter);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="id">id of entity.</param>
         public void DeleteFromRepository(int id)
         {
-            FileRepository.DeleteFromRepository(id, RepositoryReader, _repositoryWriter);
+            _fileRepository.DeleteFromRepository(id, _repositoryReader, _repositoryWriter);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id)
         {
-            return FileRepository.GetByIdFromRepository(id, RepositoryReader);
+            return _fileRepository.GetByIdFromRepository(id, _repositoryReader);
         }
 
         /// <summary>
@@ -69,7 +69,17 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public List<TResource> GetByIdFromRepository(List<int> ids)
         {
-            return FileRepository.GetByIdFromRepository(ids, RepositoryReader);
+            return _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
+        }
+
+        /// <summary>
+        /// Get entities by name form repository.
+        /// </summary>
+        /// <param name="name">name of entity.</param>
+        /// <returns>List of entities for success, null for fail.</returns>
+        public TResource? GetByNameFromRepository(string name)
+        {
+            return _fileRepository.GetByNameFromRepository(name, _repositoryReader);
         }
 
         /// <summary>
@@ -78,7 +88,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entities">New entities for overwrite repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities)
         {
-            FileRepository.ReplaceRepository(entities, _repositoryWriter);
+            _fileRepository.ReplaceRepository(entities, _repositoryWriter);
         }
 
         /// <summary>
@@ -87,7 +97,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity">Entity for update.</param>
         public void UpdateInRepository(TResource entity)
         {
-            FileRepository.UpdateInRepository(entity, RepositoryReader, _repositoryWriter);
+            _fileRepository.UpdateInRepository(entity, _repositoryReader, _repositoryWriter);
         }
     }
 }

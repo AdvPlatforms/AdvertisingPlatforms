@@ -1,6 +1,4 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.DAL.Extensions;
-using AdvertisingPlatforms.DAL.Repositories;
 using AdvertisingPlatforms.DAL.Repositories.Base;
 using AdvertisingPlatforms.Domain.Exeptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;

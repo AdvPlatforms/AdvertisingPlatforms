@@ -1,6 +1,7 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
 using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Models;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
 namespace AdvertisingPlatforms.DAL.FileAccess
@@ -11,11 +12,11 @@ namespace AdvertisingPlatforms.DAL.FileAccess
     /// <typeparam name="TResource">Resource</typeparam>
     public class FileRepository<TResource> where TResource : Resource
     {
-        public readonly string FilePath;
+        private readonly string _filePath;
 
         public FileRepository(string filePath)
         {
-            FilePath = filePath;
+            _filePath = filePath;
         }
 
         /// <summary>
@@ -26,9 +27,9 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <param name="repositoryWriter">Writer for repository.</param>
         public void AddToRepository(TResource entity, IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
-            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(FilePath);
+            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(_filePath);
             repositoryEntities.Add(entity);
-            repositoryWriter.SaveChangesToFile( FilePath,repositoryEntities);
+            repositoryWriter.SaveChangesToFile( _filePath,repositoryEntities);
         }
 
         /// <summary>
@@ -39,14 +40,14 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <param name="repositoryWriter">Writer for repository.</param>
         public void DeleteFromRepository(int id, IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
-            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(FilePath);
+            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(_filePath);
 
             var entityForDelete = repositoryEntities.Find(x => x.Id == id);
 
             if (entityForDelete == null) return;
             
             repositoryEntities.Remove(entityForDelete);
-            repositoryWriter.SaveChangesToFile(FilePath, repositoryEntities);
+            repositoryWriter.SaveChangesToFile(_filePath, repositoryEntities);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id, IRepositoryReader repositoryReader)
         {
-            return repositoryReader.GetAllFromFile<TResource>(FilePath).Find(x => x.Id == id);
+            return repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Id == id);
         }
 
         /// <summary>
@@ -68,7 +69,17 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <returns>List of entities for success, empty collection for fail.</returns>
         public List<TResource> GetByIdFromRepository(List<int> ids, IRepositoryReader repositoryReader)
         {
-            return repositoryReader.GetAllFromFile<TResource>(FilePath).Where(x => ids.Contains(x.Id)).ToList();
+            return repositoryReader.GetAllFromFile<TResource>(_filePath).Where(x => ids.Contains(x.Id)).ToList();
+        }
+
+        /// <summary>
+        /// Get entity by name form repository.
+        /// </summary>
+        /// <param name="name">name of entity.</param>
+        /// <returns>Entity for success, null for fail</returns>
+        public TResource? GetByNameFromRepository(string name, IRepositoryReader repositoryReader)
+        {
+            return repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Name == name);
         }
 
         /// <summary>
@@ -78,7 +89,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <param name="repositoryWriter">Writer for repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities, IRepositoryWriter repositoryWriter)
         {
-            repositoryWriter.SaveChangesToFile(FilePath, entities);
+            repositoryWriter.SaveChangesToFile(_filePath, entities);
         }
 
         /// <summary>
@@ -90,7 +101,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <exception cref="BusinessException"></exception>
         public void UpdateInRepository(TResource entity, IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
-            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(FilePath);
+            var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(_filePath);
 
             var entityForUpdate = repositoryEntities.Find(x => x.Id == entity.Id);
 
@@ -98,7 +109,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
                 throw new BusinessException(ErrorConstants.EntityNotFound);
 
             entityForUpdate = entity;
-            repositoryWriter.SaveChangesToFile(FilePath, repositoryEntities);
+            repositoryWriter.SaveChangesToFile(_filePath, repositoryEntities);
         }
     }
 }
