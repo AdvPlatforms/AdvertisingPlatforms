@@ -3,22 +3,34 @@
 namespace AdvertisingPlatforms.Domain.Models
 {
     /// <summary>
-    /// Advertising platform.
+    /// Model that displays the availability of advertising platforms for a location.
     /// </summary>
     public class AdvertisingPlatform: Resource
     {
         /// <summary>
-        /// ID for advertising platform.
+        /// ID of model.
         /// </summary>
-        public sealed override int Id { get; set; }
+        public override int Id { get; set; }
+        /// <summary>
+        /// ID of location.
+        /// </summary>
+        public int LocationId { get; set; }
+        /// <summary>
+        /// IDs of advertising platforms  available for the location.
+        /// </summary>
+        public List<int> AdvertisingIds { get; set; }
 
         /// <summary>
-        /// Create advertising platform.
+        /// Create a model that displays the availability of advertising platforms for a location.
         /// </summary>
-        /// <param name="id">ID for platform.</param>
-        public AdvertisingPlatform(int id)
+        /// <param name="id">ID of model.</param>
+        /// <param name="locationId">ID of location.</param>
+        /// <param name="advertisingIds">IDs of advertising platforms  available for the location.</param>
+        public AdvertisingPlatform(int id, int locationId, List<int> advertisingIds)
         {
             Id = id;
+            LocationId = locationId;
+            AdvertisingIds = advertisingIds;
         }
     }
 }

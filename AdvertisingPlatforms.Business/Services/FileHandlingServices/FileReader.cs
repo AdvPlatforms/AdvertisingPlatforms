@@ -41,7 +41,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
             AdvertisingInformation result = _parser.GetParseData(fileContent);
 
-            if (result.AdvertisingPlatforms.Count == 0 ||
+            if (result.Advertising.Count == 0 ||
                 result.Locations.Count == 0) 
             {
                 throw new BusinessException(ErrorConstants.NoCorrectFileData);

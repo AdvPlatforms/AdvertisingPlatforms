@@ -7,14 +7,14 @@ namespace AdvertisingPlatforms.DAL.Repositories
     /// <summary>
     /// Repository of advertisingPlatforms for working with a json file.
     /// </summary>
-    public class AdvertisingPlatformsFileRepository : Repository<AdvertisingPlatform>
+    public class AdvertisingFileRepository : Repository<Advertising>
     {
         /// <summary>
         /// Create repository for advertising platforms.
         /// </summary>
         /// <param name="repositoryReader">Repository reader.</param>
         /// <param name="repositoryWriter">Repository writer.</param>
-        public AdvertisingPlatformsFileRepository(
+        public AdvertisingFileRepository(
             IRepositoryReader repositoryReader, 
             IRepositoryWriter repositoryWriter): base(repositoryReader, repositoryWriter) {}
     }

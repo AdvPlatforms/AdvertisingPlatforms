@@ -8,12 +8,12 @@
         /// <summary>
         /// Collection advertisingInLocations.
         /// </summary>
-        public IReadOnlyList<AdvertisingInLocation> AdvertisingInLocations { get; }
+        public IReadOnlyList<AdvertisingPlatform> AdvertisingPlatforms { get; }
 
         /// <summary>
         /// Collection advertising.
         /// </summary>
-        public IReadOnlyList<AdvertisingPlatform> AdvertisingPlatforms { get; }
+        public IReadOnlyList<Advertising> Advertising { get; }
 
         /// <summary>
         /// Collection locations.
@@ -23,16 +23,16 @@
         /// <summary>
         /// Create new model.
         /// </summary>
-        /// <param name="advertisingInLocations">Collection AdvertisingInLocation</param>
-        /// <param name="advertisingPlatforms">Collection advertising.</param>
+        /// <param name="advertisingPlatforms">Collection AdvertisingInLocation</param>
+        /// <param name="advertising">Collection advertising.</param>
         /// <param name="locations">Collection locations.</param>
         public AdvertisingInformation( 
-            IReadOnlyList<AdvertisingInLocation> advertisingInLocations, 
             IReadOnlyList<AdvertisingPlatform> advertisingPlatforms, 
+            IReadOnlyList<Advertising> advertising, 
             IReadOnlyList<Location> locations)
         {
-            AdvertisingInLocations = advertisingInLocations;
             AdvertisingPlatforms = advertisingPlatforms;
+            Advertising = advertising;
             Locations = locations;
         }
     }

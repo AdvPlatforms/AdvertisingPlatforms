@@ -10,11 +10,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     /// <summary>
     /// Service for advertising platforms.
     /// </summary>
-    public class AdvertisingPlatformsService : IAdvertisingPlatformsService
+    public class AdvertisingService : IAdvertisingService
     {
-        private readonly Repository<AdvertisingPlatform> _advertisingPlatformPlatformsRepository;
+        private readonly Repository<Advertising> _advertisingPlatformPlatformsRepository;
 
-        public AdvertisingPlatformsService(Repository<AdvertisingPlatform> advertisingPlatformsRepository)
+        public AdvertisingService(Repository<Advertising> advertisingPlatformsRepository)
         {
             _advertisingPlatformPlatformsRepository = advertisingPlatformsRepository;
         }
@@ -25,7 +25,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <param name="id">ID of advertising platform.</param>
         /// <returns>Advertising platform or null.</returns>
         /// <exception cref="BusinessException"></exception>
-        public AdvertisingPlatform? GetById(int id)
+        public Advertising? GetById(int id)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <param name="newEntitiesList">New data for repository.</param>
         /// <returns>Count new entities.</returns>
         /// <exception cref="BusinessException"></exception>
-        public int ReplaceRepository(IReadOnlyList<AdvertisingPlatform> newEntitiesList)
+        public int ReplaceRepository(IReadOnlyList<Advertising> newEntitiesList)
         {
             try
             {

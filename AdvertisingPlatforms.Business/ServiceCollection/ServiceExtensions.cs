@@ -16,9 +16,9 @@ namespace AdvertisingPlatforms.Business.ServiceCollection
         /// </summary>
         public static void AddAdvertisingServices(this IServiceCollection services)
         {
-            services.AddScoped<IAdvertisingPlatformsService, AdvertisingPlatformsService>();
-            services.AddScoped<ILocationsService, LocationsService>();
-            services.AddScoped<IAdvertisingInLocationService, AdvertisingInLocationService>();
+            services.AddScoped<IAdvertisingService, AdvertisingService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IAdvertisingPlatformService, AdvertisingPlatformService>();
         }
 
         /// <summary>

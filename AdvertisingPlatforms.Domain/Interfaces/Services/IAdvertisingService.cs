@@ -6,7 +6,7 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
     /// <summary>
     /// Interface for service of platforms.
     /// </summary>
-    public interface IAdvertisingPlatformsService: IReplaceData<AdvertisingPlatform>
+    public interface IAdvertisingService: IReplaceData<Advertising>
     {
         /// <summary>
         /// Get advertising platform by ID.
@@ -14,6 +14,6 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// <param name="id">ID of advertising platform.</param>
         /// <returns>Advertising platform or null.</returns>
         /// <exception cref="BusinessException"></exception>
-        public AdvertisingPlatform? GetById(int id);
+        public Advertising? GetById(int id);
     }
 }

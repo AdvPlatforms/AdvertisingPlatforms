@@ -24,7 +24,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
             var advertisingPlatforms = sortFileContent
                 .SelectMany(x => x.Value)
                 .Distinct()
-                .Select((x, Index) => new AdvertisingPlatform(Index + 1) { Name = x });
+                .Select((x, Index) => new Advertising(Index + 1) { Name = x });
 
             var locations = sortFileContent
                 .Select((x, Index) => new Location(Index + 1) { Name = x.Key });
@@ -35,13 +35,13 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
             return new(advertisingInLocations.ToList(),advertisingPlatforms.ToList(), locations.ToList());
         }
 
-        private IEnumerable<AdvertisingInLocation> GetAdvertisingInLocations(
+        private IEnumerable<AdvertisingPlatform> GetAdvertisingInLocations(
               IEnumerable<KeyValuePair<string,
               IEnumerable<string>>> sortFileContent, 
-              IEnumerable<AdvertisingPlatform> advertisingPlatforms, IEnumerable<Location> locations)
+              IEnumerable<Advertising> advertisingPlatforms, IEnumerable<Location> locations)
         {
             return sortFileContent
-                .Select((x, Index) => new AdvertisingInLocation(
+                .Select((x, Index) => new AdvertisingPlatform(
                     Index + 1,
                     locations.First(y=>y.Name == x.Key).Id,
                     advertisingPlatforms

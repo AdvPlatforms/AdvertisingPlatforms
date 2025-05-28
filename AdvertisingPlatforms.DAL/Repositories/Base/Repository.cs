@@ -27,9 +27,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         {
             return typeof(TResource).Name switch
             {
-                "Location" => DbConfig.LocationsDbPath,
-                "AdvertisingPlatform" => DbConfig.AdvertisingPlatformsDbPath,
-                "AdvertisingInLocation" => DbConfig.AdvertisingInLocationDbPath,
+                "Location" => DbConfig.LocationDbPath,
+                "Advertising" => DbConfig.AdvertisingDbPath,
+                "AdvertisingPlatform" => DbConfig.AdvertisingPlatformDbPath,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

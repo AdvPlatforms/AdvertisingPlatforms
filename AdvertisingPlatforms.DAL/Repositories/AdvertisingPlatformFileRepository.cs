@@ -5,17 +5,17 @@ using AdvertisingPlatforms.Domain.Models;
 namespace AdvertisingPlatforms.DAL.Repositories
 {
     /// <summary>
-    /// Repository of locations for working with a json file.
+    /// Repository of advertisingInLocation for working with a json file.
     /// </summary>
-    public class LocationsFileRepository : Repository<Location>
+    public class AdvertisingPlatformFileRepository : Repository<AdvertisingPlatform>
     {
         /// <summary>
-        /// Create repository for locations.
+        /// Create repository for advertising in location.
         /// </summary>
         /// <param name="repositoryReader">Repository reader.</param>
         /// <param name="repositoryWriter">Repository writer.</param>
-        public LocationsFileRepository(
-            IRepositoryReader repositoryReader,
-            IRepositoryWriter repositoryWriter) : base(repositoryReader, repositoryWriter) { }
+        public AdvertisingPlatformFileRepository(
+            IRepositoryReader repositoryReader, 
+            IRepositoryWriter repositoryWriter): base(repositoryReader, repositoryWriter) {}
     }
 }

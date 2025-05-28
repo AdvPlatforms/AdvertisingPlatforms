@@ -11,21 +11,21 @@ namespace AdvertisingPlatforms.Controllers
     [Route("/api/v1/[controller]")]
     public class AdvertisingPlatformsController : Controller
     {
-        private readonly IAdvertisingInLocationService _advertisingsInLocationService;
-        private readonly IAdvertisingPlatformsService _advertisitngPlatformsService;
-        private readonly ILocationsService _locationsService;
+        private readonly IAdvertisingPlatformService _advertisingPlatformService;
+        private readonly IAdvertisingService _advertisingService;
+        private readonly ILocationService _locationService;
         private readonly IFileReader _reader;
         private const string PrefLocationName = @"/";
 
         public AdvertisingPlatformsController(
-            IAdvertisingInLocationService advertisingsInLocationService,
-            IAdvertisingPlatformsService platformsService,
-            ILocationsService locationsService,
+            IAdvertisingPlatformService advertisingPlatformService,
+            IAdvertisingService advertisingService,
+            ILocationService locationService,
             IFileReader reader)
         {
-            _advertisingsInLocationService = advertisingsInLocationService;
-            _advertisitngPlatformsService = platformsService;
-            _locationsService = locationsService;
+            _advertisingPlatformService = advertisingPlatformService;
+            _advertisingService = advertisingService;
+            _locationService = locationService;
             _reader = reader;
         }
 
@@ -38,11 +38,11 @@ namespace AdvertisingPlatforms.Controllers
         public IActionResult GetAdvertisingPlatforms(string location)
         {
             string locationName = PrefLocationName + location;
-            var advertisingPlatformsForLocation = _advertisingsInLocationService.GetAdvertisingPlatformsForLocation(locationName);
+            var advertisingForLocation = _advertisingPlatformService.GetAdvertisingPlatformsForLocation(locationName);
 
-            if (advertisingPlatformsForLocation is { Count: > 0 })
+            if (advertisingForLocation is { Count: > 0 })
             {
-                var okResult = new AdvertisingsResult(advertisingPlatformsForLocation);
+                var okResult = new AdvertisingsResult(advertisingForLocation);
                 return Ok(okResult);
             }
             else
@@ -61,13 +61,13 @@ namespace AdvertisingPlatforms.Controllers
         {
             var data = await _reader.GetDataFromFileAsync(file);
 
-            if (data?.AdvertisingPlatforms.Count > 0)
+            if (data?.Advertising.Count > 0)
             {
-                _advertisingsInLocationService.ReplaceRepository(data.AdvertisingInLocations);
-                var countAdvertisingPlatforms = _advertisitngPlatformsService.ReplaceRepository(data.AdvertisingPlatforms);
-                var countLocations = _locationsService.ReplaceRepository(data.Locations);
+                _advertisingPlatformService.ReplaceRepository(data.AdvertisingPlatforms);
+                var countAdvertising = _advertisingService.ReplaceRepository(data.Advertising);
+                var countLocations = _locationService.ReplaceRepository(data.Locations);
 
-                var okResult = new AdvertisingUpdateResult(countAdvertisingPlatforms, countLocations);
+                var okResult = new AdvertisingUpdateResult(countAdvertising, countLocations);
                 return Ok(okResult);
             }
             else

@@ -12,7 +12,7 @@ namespace AdvertisingPlatforms.DAL.Resources
 
         static RuLocalization()
         {
-            ResourceManager = new ResourceManager("AdvertisingPlatforms.DAL.Resources.RuMessages", Assembly.GetExecutingAssembly());
+            ResourceManager = new ResourceManager("Advertising.DAL.Resources.RuMessages", Assembly.GetExecutingAssembly());
         }
 
         /// <summary>

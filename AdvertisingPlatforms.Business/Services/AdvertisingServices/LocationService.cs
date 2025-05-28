@@ -9,11 +9,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     /// <summary>
     /// Service of locations.
     /// </summary>
-    public class LocationsService : ILocationsService
+    public class LocationService : ILocationService
     {
         private readonly Repository<Location> _locationRepository;
 
-        public LocationsService(Repository<Location> locationRepository)
+        public LocationService(Repository<Location> locationRepository)
         {
             _locationRepository = locationRepository;
         }

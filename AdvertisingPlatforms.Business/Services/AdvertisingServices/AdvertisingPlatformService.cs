@@ -9,20 +9,20 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     /// <summary>
     /// Service for searching advertising platforms for a specific location.
     /// </summary>
-    public class AdvertisingInLocationService : IAdvertisingInLocationService
+    public class AdvertisingPlatformService : IAdvertisingPlatformService
     {
-        private readonly Repository<AdvertisingInLocation> _advertisingInLocationRepository;
-        private readonly IAdvertisingPlatformsService _advertisingPlatformsService;
-        private readonly ILocationsService _locationsService;
+        private readonly Repository<AdvertisingPlatform> _advertisingPlatformRepository;
+        private readonly IAdvertisingService _advertisingService;
+        private readonly ILocationService _locationService;
 
-        public AdvertisingInLocationService(
-            Repository<AdvertisingInLocation> advertisingInLocationRepository,
-            IAdvertisingPlatformsService advertisingPlatformsService, 
-            ILocationsService locationsService)
+        public AdvertisingPlatformService(
+            Repository<AdvertisingPlatform> advertisingPlatformRepository,
+            IAdvertisingService advertisingService, 
+            ILocationService locationService)
         {
-            _advertisingInLocationRepository = advertisingInLocationRepository;
-            _advertisingPlatformsService = advertisingPlatformsService;
-            _locationsService = locationsService;
+            _advertisingPlatformRepository = advertisingPlatformRepository;
+            _advertisingService = advertisingService;
+            _locationService = locationService;
         }
 
         /// <summary>
@@ -35,12 +35,12 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         {
             try
             {
-                var locationId = (int)_locationsService.GetByName(locationName)?.Id;
+                var locationId = (int)_locationService.GetByName(locationName)?.Id;
 
-                var advertisingInLocation = _advertisingInLocationRepository.GetByIdFromRepository(locationId);
+                var advertisingPlatform = _advertisingPlatformRepository.GetByIdFromRepository(locationId);
 
-                return advertisingInLocation?.AdvertisingIds
-                    .Select(x => _advertisingPlatformsService.GetById(x).Name)
+                return advertisingPlatform?.AdvertisingIds
+                    .Select(x => _advertisingService.GetById(x).Name)
                     .ToList();
             }
             catch (InvalidOperationException ex)
@@ -58,9 +58,9 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
             }
         }
 
-        public int ReplaceRepository(IReadOnlyList<AdvertisingInLocation> newEntitiesList)
+        public int ReplaceRepository(IReadOnlyList<AdvertisingPlatform> newEntitiesList)
         {
-            _advertisingInLocationRepository.ReplaceRepository(newEntitiesList);
+            _advertisingPlatformRepository.ReplaceRepository(newEntitiesList);
             return newEntitiesList.Count;
         }
     }
