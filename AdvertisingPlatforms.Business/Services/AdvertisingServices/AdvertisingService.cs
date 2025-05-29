@@ -1,6 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
 using AdvertisingPlatforms.DAL.Repositories.Base;
-using AdvertisingPlatforms.Domain.Exeptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
 
@@ -24,17 +23,9 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// </summary>
         /// <param name="id">ID of advertising platform.</param>
         /// <returns>Advertising platform or null.</returns>
-        /// <exception cref="BusinessException"></exception>
         public Advertising? GetById(int id)
         {
-            try
-            {
-                return _advertisingPlatformPlatformsRepository.GetByIdFromRepository(id);
-            }
-            catch (Exception ex)
-            {
-                throw new BusinessException(ErrorConstants.ServiceGetData, ex);
-            }
+            return _advertisingPlatformPlatformsRepository.GetByIdFromRepository(id);
         }
 
         /// <summary>
@@ -42,21 +33,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// </summary>
         /// <param name="newEntitiesList">New data for repository.</param>
         /// <returns>Count new entities.</returns>
-        /// <exception cref="BusinessException"></exception>
         public int ReplaceRepository(IReadOnlyList<Advertising> newEntitiesList)
         {
-            try
-            {
-                _advertisingPlatformPlatformsRepository.ReplaceRepository(newEntitiesList);
+            _advertisingPlatformPlatformsRepository.ReplaceRepository(newEntitiesList);
 
-                return newEntitiesList.Count;
-            }
-            catch (Exception ex)
-            {
-                throw new BusinessException(
-                    ErrorConstants.ServiceReplaceRepository,
-                    ex);
-            }
+            return newEntitiesList.Count;
         }
     }
 }

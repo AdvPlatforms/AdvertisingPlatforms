@@ -2,7 +2,7 @@
 using AdvertisingPlatforms.DAL.Extensions;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 using AdvertisingPlatforms.DAL.Interfaces;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 
 namespace AdvertisingPlatforms.DAL.FileAccess
 {
@@ -14,7 +14,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <typeparam name="TResource">notnull, Resource</typeparam>
         /// <param name="filePath">Path for file with data.</param>
         /// <returns>List of entities.</returns>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="RepositoryException"></exception>
         public List<TResource> GetAllFromFile<TResource>(string filePath) where TResource : Resource
         {
             if (this.TryReadData(filePath, out List<TResource>? data))
@@ -23,7 +23,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
             }
             else
             {
-                throw new BusinessException(ErrorConstants.ReadRepository);
+                throw new RepositoryException(ErrorConstants.ReadRepository);
             }
         }
     }

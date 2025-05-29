@@ -1,6 +1,6 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
 using AdvertisingPlatforms.DAL.Repositories.Base;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
 
@@ -17,7 +17,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
 
         public AdvertisingPlatformService(
             Repository<AdvertisingPlatform> advertisingPlatformRepository,
-            IAdvertisingService advertisingService, 
+            IAdvertisingService advertisingService,
             ILocationService locationService)
         {
             _advertisingPlatformRepository = advertisingPlatformRepository;
@@ -30,32 +30,17 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// </summary>
         /// <param name="locationName">Name of location.</param>
         /// <returns>Advertising platform names.</returns>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="GetAdvertisingException"></exception>
         public IReadOnlyList<string>? GetAdvertisingPlatformsForLocation(string locationName)
         {
-            try
-            {
-                var locationId = (int)_locationService.GetByName(locationName)?.Id;
+            var locationId = _locationService.GetByName(locationName)?.Id 
+                ?? throw new GetAdvertisingException(ErrorConstants.NotFound);
 
-                var advertisingPlatform = _advertisingPlatformRepository.GetByIdFromRepository(locationId);
+            var advertisingPlatform = _advertisingPlatformRepository.GetByIdFromRepository(locationId);
 
-                return advertisingPlatform?.AdvertisingIds
-                    .Select(x => _advertisingService.GetById(x).Name)
-                    .ToList();
-            }
-            catch (InvalidOperationException ex)
-            {
-                //TODO
-                throw;
-            }
-            catch (Exception ex)
-            {
-                var a = ex.GetType();
-
-                throw new BusinessException(
-                    ErrorConstants.ServiceGetData,
-                    ex);
-            }
+            return advertisingPlatform?.AdvertisingIds
+                .Select(x => _advertisingService.GetById(x).Name)
+                .ToList();
         }
 
         public int ReplaceRepository(IReadOnlyList<AdvertisingPlatform> newEntitiesList)

@@ -1,5 +1,4 @@
-﻿using AdvertisingPlatforms.Domain.Exeptions;
-using AdvertisingPlatforms.Domain.Models;
+﻿using AdvertisingPlatforms.Domain.Models;
 
 namespace AdvertisingPlatforms.Domain.Interfaces.Services
 {
@@ -20,7 +19,6 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// </summary>
         /// <param name="id">ID of location.</param>
         /// <returns>Location.</returns>
-        /// <exception cref="BusinessException"></exception>
         public Location? GetById(int id);
     }
 }

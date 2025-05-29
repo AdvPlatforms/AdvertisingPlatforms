@@ -1,5 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models.ResponseApi;
@@ -40,15 +40,9 @@ namespace AdvertisingPlatforms.Controllers
             string locationName = PrefLocationName + location;
             var advertisingForLocation = _advertisingPlatformService.GetAdvertisingPlatformsForLocation(locationName);
 
-            if (advertisingForLocation is { Count: > 0 })
-            {
-                var okResult = new AdvertisingsResult(advertisingForLocation);
-                return Ok(okResult);
-            }
-            else
-            {
-                throw new BusinessException(ErrorConstants.NotFound);
-            }               
+            var okResult = new AdvertisingsResult(advertisingForLocation!);
+            return Ok(okResult);
+         
         }
 
         /// <summary>
@@ -61,19 +55,12 @@ namespace AdvertisingPlatforms.Controllers
         {
             var data = await _reader.GetDataFromFileAsync(file);
 
-            if (data?.Advertising.Count > 0)
-            {
-                _advertisingPlatformService.ReplaceRepository(data.AdvertisingPlatforms);
-                var countAdvertising = _advertisingService.ReplaceRepository(data.Advertising);
-                var countLocations = _locationService.ReplaceRepository(data.Locations);
+            _advertisingPlatformService.ReplaceRepository(data!.AdvertisingPlatforms);
+            var countAdvertising = _advertisingService.ReplaceRepository(data.Advertising);
+            var countLocations = _locationService.ReplaceRepository(data.Locations);
 
-                var okResult = new AdvertisingUpdateResult(countAdvertising, countLocations);
-                return Ok(okResult);
-            }
-            else
-            {
-                throw new BusinessException(ErrorConstants.NoCorrectFileData);
-            }
+            var okResult = new AdvertisingUpdateResult(countAdvertising, countLocations);
+            return Ok(okResult);
         }
     }
 }

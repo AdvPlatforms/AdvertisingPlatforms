@@ -1,5 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models;
 
@@ -25,7 +25,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// </summary>
         /// <param name="file">File with data.</param>
         /// <returns>Data or null.</returns>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="ValidFileContentException"></exception>
         public async Task<AdvertisingInformation?> GetDataFromFileAsync(Microsoft.AspNetCore.Http.IFormFile file)
         {
             using StreamReader streamReader = new(file.OpenReadStream());
@@ -36,7 +36,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
             if (!isValid.result)
             {
-                throw new BusinessException(isValid.error!);                
+                throw new ValidFileContentException(isValid.error!);                
             }
 
             AdvertisingInformation result = _parser.GetParseData(fileContent);
@@ -44,7 +44,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
             if (result.Advertising.Count == 0 ||
                 result.Locations.Count == 0) 
             {
-                throw new BusinessException(ErrorConstants.NoCorrectFileData);
+                throw new ValidFileContentException(ErrorConstants.NoCorrectFileData);
             }
 
             return result;

@@ -1,6 +1,6 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
 using AdvertisingPlatforms.DAL.Interfaces;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Models;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
@@ -98,7 +98,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <param name="entity">Entity for update.</param>
         /// <param name="repositoryReader">Reader for repository.</param>
         /// <param name="repositoryWriter">Writer for repository.</param>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="RepositoryException"></exception>
         public void UpdateInRepository(TResource entity, IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
             var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(_filePath);
@@ -106,7 +106,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
             var entityForUpdate = repositoryEntities.Find(x => x.Id == entity.Id);
 
             if (entityForUpdate == null)
-                throw new BusinessException(ErrorConstants.EntityNotFound);
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
 
             entityForUpdate = entity;
             repositoryWriter.SaveChangesToFile(_filePath, repositoryEntities);

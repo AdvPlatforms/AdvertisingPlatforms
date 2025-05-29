@@ -1,4 +1,4 @@
-﻿using AdvertisingPlatforms.Domain.Exeptions;
+﻿using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Models;
 using System.Net;
 using System.Text.Json;
@@ -25,7 +25,19 @@ namespace AdvertisingPlatforms.Middlewares
             {
                 await _next(httpContext);
             }
-            catch (BusinessException ex)
+            catch (ConfigurationReadException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError);
+            }
+            catch (GetAdvertisingException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest);
+            }
+            catch (RepositoryException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError);
+            }
+            catch (ValidFileContentException ex)
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest);
             }
@@ -37,13 +49,16 @@ namespace AdvertisingPlatforms.Middlewares
 
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception, HttpStatusCode httpStatusCode)
         {
-            ExceptionInfo exceptionInfo = new (
+            ExceptionInfo exceptionInfo = new(
                 exception.GetType().Name,
                 exception.Message,
                 httpContext.Request.Path
                 );
 
-            AddDetailsForDevelopment(exception, exceptionInfo);
+            if (_environment.IsDevelopment())
+            {
+                AddDetailsForDevelopment(exception, exceptionInfo);
+            }
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)httpStatusCode;
@@ -54,21 +69,18 @@ namespace AdvertisingPlatforms.Middlewares
 
         private void AddDetailsForDevelopment(Exception exception, ExceptionInfo exceptionInfo)
         {
-            if (_environment.IsDevelopment())
+            exceptionInfo.StackTrace = exception.StackTrace;
+
+            while (exception.InnerException != null)
             {
-                exceptionInfo.StackTrace = exception.StackTrace;
+                exception = exception.InnerException;
+                exceptionInfo.InnerExceptionInfo = new(
+                    exception.GetType().Name,
+                    exception.Message,
+                    stackTrace: exception.StackTrace
+                    );
 
-                while (exception.InnerException != null)
-                {
-                    exception = exception.InnerException;
-                    exceptionInfo.InnerExceptionInfo = new(
-                        exception.GetType().Name,
-                        exception.Message,
-                        stackTrace: exception.StackTrace
-                        );
-
-                    exceptionInfo = exceptionInfo.InnerExceptionInfo;
-                }
+                exceptionInfo = exceptionInfo.InnerExceptionInfo;
             }
         }
     }

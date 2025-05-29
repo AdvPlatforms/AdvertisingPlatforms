@@ -1,4 +1,4 @@
-﻿using AdvertisingPlatforms.Domain.Exeptions;
+﻿using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Models;
 
 namespace AdvertisingPlatforms.Domain.Interfaces.Services
@@ -13,7 +13,7 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// </summary>
         /// <param name="id">ID of advertising platform.</param>
         /// <returns>Advertising platform or null.</returns>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="GetAdvertisingException"></exception>
         public Advertising? GetById(int id);
     }
 }

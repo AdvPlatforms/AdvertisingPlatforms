@@ -1,5 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using Microsoft.Extensions.Configuration;
 
 namespace AdvertisingPlatforms.DAL.Configuration
@@ -34,9 +34,7 @@ namespace AdvertisingPlatforms.DAL.Configuration
         public static string LocationDbPath => _initialized 
             ? _locationDbPath.Value 
             : Error(ErrorConstants.ConfigNotInitialized);
-
-        
-
+       
         /// <summary>
         /// Initialize configuration.
         /// </summary>
@@ -60,7 +58,7 @@ namespace AdvertisingPlatforms.DAL.Configuration
             _initialized = true;
         }
 
-        private static string Error(string message) => throw new BusinessException(message);
+        private static string Error(string message) => throw new ConfigurationReadException(message);
 
     }
 }

@@ -1,5 +1,4 @@
-﻿using AdvertisingPlatforms.Domain.Exeptions;
-using AdvertisingPlatforms.Domain.Models;
+﻿using AdvertisingPlatforms.Domain.Models;
 
 namespace AdvertisingPlatforms.Domain.Interfaces.Services
 {
@@ -13,7 +12,6 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// </summary>
         /// <param name="locationName">Name of location.</param>
         /// <returns>Advertising platform names.</returns>
-        /// <exception cref="BusinessException"></exception>
         public IReadOnlyList<string>? GetAdvertisingPlatformsForLocation(string locationName);
     }
 }
