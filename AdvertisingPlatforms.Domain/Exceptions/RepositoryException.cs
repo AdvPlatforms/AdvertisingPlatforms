@@ -1,9 +1,11 @@
-﻿namespace AdvertisingPlatforms.Domain.Exceptions
+﻿using AdvertisingPlatforms.Domain.Exceptions.Base;
+
+namespace AdvertisingPlatforms.Domain.Exceptions
 {
     /// <summary>
     /// Exception when working with repository.
     /// </summary>
-    public class RepositoryException : Exception
+    public class RepositoryException : BusinessException
     {
         /// <summary>
         /// Exception when working with repository.

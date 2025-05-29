@@ -1,9 +1,11 @@
-﻿namespace AdvertisingPlatforms.Domain.Exceptions
+﻿using AdvertisingPlatforms.Domain.Exceptions.Base;
+
+namespace AdvertisingPlatforms.Domain.Exceptions
 {
     /// <summary>
     /// File reading exception.
     /// </summary>
-    public class ValidFileContentException : Exception
+    public class ValidFileContentException : BusinessException
     {
         /// <summary>
         /// File reading exception.

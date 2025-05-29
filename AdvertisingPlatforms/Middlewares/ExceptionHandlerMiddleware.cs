@@ -1,4 +1,6 @@
-﻿using AdvertisingPlatforms.Domain.Exceptions;
+﻿using AdvertisingPlatforms.DAL.Resources;
+using AdvertisingPlatforms.Domain.Exceptions;
+using AdvertisingPlatforms.Domain.Exceptions.Base;
 using AdvertisingPlatforms.Domain.Models;
 using System.Net;
 using System.Text.Json;
@@ -49,9 +51,13 @@ namespace AdvertisingPlatforms.Middlewares
 
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception, HttpStatusCode httpStatusCode)
         {
+            var title = exception is BusinessException
+                ? RuLocalization.GetLocalizedMessage((exception as BusinessException)!)
+                : exception.Message;
+
             ExceptionInfo exceptionInfo = new(
                 exception.GetType().Name,
-                exception.Message,
+                title,
                 httpContext.Request.Path
                 );
 

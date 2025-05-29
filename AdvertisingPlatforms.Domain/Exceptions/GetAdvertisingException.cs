@@ -1,9 +1,11 @@
-﻿namespace AdvertisingPlatforms.Domain.Exceptions
+﻿using AdvertisingPlatforms.Domain.Exceptions.Base;
+
+namespace AdvertisingPlatforms.Domain.Exceptions
 {
     /// <summary>
     /// Exception when trying to get a list of advertising.
     /// </summary>
-    public class GetAdvertisingException : Exception
+    public class GetAdvertisingException : BusinessException
     {
         /// <summary>
         /// Exception when trying to get a list of advertising.

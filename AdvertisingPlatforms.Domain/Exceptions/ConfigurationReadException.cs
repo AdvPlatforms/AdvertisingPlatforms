@@ -1,9 +1,11 @@
-﻿namespace AdvertisingPlatforms.Domain.Exceptions
+﻿using AdvertisingPlatforms.Domain.Exceptions.Base;
+
+namespace AdvertisingPlatforms.Domain.Exceptions
 {
     /// <summary>
     /// Configuration read exception.
     /// </summary>
-    public class ConfigurationReadException : Exception
+    public class ConfigurationReadException : BusinessException
     {
         /// <summary>
         /// Configuration read exception.
