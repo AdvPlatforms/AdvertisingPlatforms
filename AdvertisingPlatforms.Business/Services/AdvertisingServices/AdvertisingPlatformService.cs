@@ -42,9 +42,8 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
 
             var advertisingPlatform = _advertisingPlatformRepository.GetByIdFromRepository(locationId);
 
-            //TODO refactoring. optimize iteration
-            var result = advertisingPlatform?.AdvertisingIds
-                .Select(x => _advertisingService.GetById(x).Name)
+            var result = _advertisingService.GetAllByIds(advertisingPlatform?.AdvertisingIds)? 
+                .Select(x => x.Name)
                 .ToList();
 
             _loggerService.LogEnd(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));

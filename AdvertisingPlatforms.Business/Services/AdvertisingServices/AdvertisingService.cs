@@ -22,16 +22,16 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         }
 
         /// <summary>
-        /// Get advertising platform by ID.
+        /// Get all advertising by IDs.
         /// </summary>
-        /// <param name="id">ID of advertising platform.</param>
-        /// <returns>Advertising platform or null.</returns>
-        public Advertising? GetById(int id)
+        /// <param name="advertisingIds">ID of advertising platform.</param>
+        /// <returns>List of advertising or null.</returns>
+        public List<Advertising>? GetAllByIds(List<int> advertisingIds)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetById));
-            var result = _advertisingPlatformPlatformsRepository.GetByIdFromRepository(id);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetAllByIds));
+            var result = _advertisingPlatformPlatformsRepository.GetByIdFromRepository(advertisingIds);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetById));
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetAllByIds));
             return result;
         }
 

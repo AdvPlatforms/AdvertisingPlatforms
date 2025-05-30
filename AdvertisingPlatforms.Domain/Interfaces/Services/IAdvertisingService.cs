@@ -9,11 +9,11 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
     public interface IAdvertisingService: IReplaceData<Advertising>
     {
         /// <summary>
-        /// Get advertising platform by ID.
+        /// Get all advertising by IDs.
         /// </summary>
-        /// <param name="id">ID of advertising platform.</param>
-        /// <returns>Advertising platform or null.</returns>
+        /// <param name="advertisingIds">ID of advertising platform.</param>
+        /// <returns>List of advertising or null.</returns>
         /// <exception cref="GetAdvertisingException"></exception>
-        public Advertising? GetById(int id);
+        public List<Advertising>? GetAllByIds(List<int> advertisingIds);
     }
 }
