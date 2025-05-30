@@ -14,15 +14,18 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         private readonly Repository<AdvertisingPlatform> _advertisingPlatformRepository;
         private readonly IAdvertisingService _advertisingService;
         private readonly ILocationService _locationService;
+        private readonly ILoggerService _loggerService;
 
         public AdvertisingPlatformService(
             Repository<AdvertisingPlatform> advertisingPlatformRepository,
             IAdvertisingService advertisingService,
-            ILocationService locationService)
+            ILocationService locationService,
+            ILoggerService loggerService)
         {
             _advertisingPlatformRepository = advertisingPlatformRepository;
             _advertisingService = advertisingService;
             _locationService = locationService;
+            _loggerService = loggerService;
         }
 
         /// <summary>
@@ -33,19 +36,28 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <exception cref="GetAdvertisingException"></exception>
         public IReadOnlyList<string>? GetAdvertisingPlatformsForLocation(string locationName)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));
             var locationId = _locationService.GetByName(locationName)?.Id 
                 ?? throw new GetAdvertisingException(ErrorConstants.NotFound);
 
             var advertisingPlatform = _advertisingPlatformRepository.GetByIdFromRepository(locationId);
 
-            return advertisingPlatform?.AdvertisingIds
+            //TODO refactoring. optimize iteration
+            var result = advertisingPlatform?.AdvertisingIds
                 .Select(x => _advertisingService.GetById(x).Name)
                 .ToList();
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));
+            return result;
         }
 
         public int ReplaceRepository(IReadOnlyList<AdvertisingPlatform> newEntitiesList)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+
             _advertisingPlatformRepository.ReplaceRepository(newEntitiesList);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
             return newEntitiesList.Count;
         }
     }

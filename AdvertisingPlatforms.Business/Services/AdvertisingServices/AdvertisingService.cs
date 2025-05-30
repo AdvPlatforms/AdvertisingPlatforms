@@ -12,10 +12,13 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     public class AdvertisingService : IAdvertisingService
     {
         private readonly Repository<Advertising> _advertisingPlatformPlatformsRepository;
+        private readonly ILoggerService _loggerService;
 
-        public AdvertisingService(Repository<Advertising> advertisingPlatformsRepository)
+        public AdvertisingService(Repository<Advertising> advertisingPlatformsRepository,
+            ILoggerService loggerService)
         {
             _advertisingPlatformPlatformsRepository = advertisingPlatformsRepository;
+            _loggerService = loggerService;
         }
 
         /// <summary>
@@ -25,7 +28,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Advertising platform or null.</returns>
         public Advertising? GetById(int id)
         {
-            return _advertisingPlatformPlatformsRepository.GetByIdFromRepository(id);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetById));
+            var result = _advertisingPlatformPlatformsRepository.GetByIdFromRepository(id);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetById));
+            return result;
         }
 
         /// <summary>
@@ -35,8 +42,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Count new entities.</returns>
         public int ReplaceRepository(IReadOnlyList<Advertising> newEntitiesList)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            
             _advertisingPlatformPlatformsRepository.ReplaceRepository(newEntitiesList);
 
+            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
             return newEntitiesList.Count;
         }
     }

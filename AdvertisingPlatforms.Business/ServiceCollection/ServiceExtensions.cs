@@ -3,6 +3,7 @@ using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Business.Services.AdvertisingServices;
 using AdvertisingPlatforms.Business.Services.FileHandlingServices;
 using Microsoft.Extensions.DependencyInjection;
+using AdvertisingPlatforms.Business.Services;
 
 namespace AdvertisingPlatforms.Business.ServiceCollection
 {
@@ -29,6 +30,14 @@ namespace AdvertisingPlatforms.Business.ServiceCollection
             services.AddScoped<IFileReader, FileReader>();
             services.AddScoped<IFileParser, FileParser>();
             services.AddScoped<IFileValidator, FileValidator>();
+        }
+
+        /// <summary>
+        /// Method for registration log services
+        /// </summary>
+        public static void AddLogServices(this IServiceCollection services)
+        {
+            services.AddScoped<ILoggerService, LoggerService>();
         }
     }
 }

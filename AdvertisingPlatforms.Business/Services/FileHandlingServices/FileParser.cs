@@ -1,4 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models;
 using System.Text.RegularExpressions;
@@ -10,7 +11,14 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
     /// </summary>
     public class FileParser : IFileParser
     {
-        private readonly Regex _regex = new(FileConstants.RowPattern);
+        private readonly ILoggerService _loggerService;
+        private readonly Regex _regex;
+
+        public FileParser(ILoggerService loggerService)
+        {
+            _loggerService = loggerService;
+            _regex = new(FileConstants.RowPattern);
+        }
 
         /// <summary>
         /// Parsing data from file.
@@ -19,6 +27,8 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// <returns>Data.</returns>
         public AdvertisingInformation GetParseData(string fileContent)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(GetParseData));
+
             var sortFileContent = GetSortFileContent(fileContent);
 
             var advertisingPlatforms = sortFileContent
@@ -32,7 +42,13 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
             var advertisingInLocations =
                 GetAdvertisingInLocations(sortFileContent, advertisingPlatforms, locations);
 
-            return new(advertisingInLocations.ToList(),advertisingPlatforms.ToList(), locations.ToList());
+            var result = new AdvertisingInformation(
+                advertisingInLocations.ToList(),
+                advertisingPlatforms.ToList(),
+                locations.ToList());
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetParseData));
+            return result;
         }
 
         private IEnumerable<AdvertisingPlatform> GetAdvertisingInLocations(

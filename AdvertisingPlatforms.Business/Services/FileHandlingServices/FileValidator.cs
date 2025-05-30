@@ -1,6 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using AdvertisingPlatforms.DAL.Const;
+﻿using AdvertisingPlatforms.DAL.Const;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
+using System.Text.RegularExpressions;
 
 namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 {
@@ -9,6 +10,12 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
     /// </summary>
     public class FileValidator : IFileValidator
     {
+        private readonly ILoggerService _loggerService;
+        public FileValidator(ILoggerService loggerService)
+        {
+            _loggerService = loggerService;
+        }
+
         /// <summary>
         /// Validation check.
         /// </summary>
@@ -16,6 +23,8 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// <returns>(True + null) or (false + error).</returns>
         public (bool result, string? error) IsValidAdvertisingData(string? data)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(IsValidAdvertisingData));
+
             if(string.IsNullOrEmpty(data))
                 return (false, ErrorConstants.NoDataFile);
 
@@ -29,6 +38,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                !Regex.IsMatch(data, FileConstants.RowPattern))
                 return (false, ErrorConstants.NoCorrectFileData);
 
+            _loggerService.LogEnd(this.GetType().Name, nameof(IsValidAdvertisingData));
             return (true, null);
         }
     }

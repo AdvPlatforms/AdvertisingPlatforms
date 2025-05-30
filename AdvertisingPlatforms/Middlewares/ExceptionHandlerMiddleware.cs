@@ -1,6 +1,7 @@
 ﻿using AdvertisingPlatforms.DAL.Resources;
 using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Exceptions.Base;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
 using System.Net;
 using System.Text.Json;
@@ -13,15 +14,17 @@ namespace AdvertisingPlatforms.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;       
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, IWebHostEnvironment environment)
+        public ExceptionHandlerMiddleware(
+            RequestDelegate next, 
+            IWebHostEnvironment environment)
         {
             _next = next;
             _environment = environment;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext httpContext, ILoggerService loggerService)
         {
             try
             {
@@ -29,27 +32,31 @@ namespace AdvertisingPlatforms.Middlewares
             }
             catch (ConfigurationReadException ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError);
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, loggerService);
             }
             catch (GetAdvertisingException ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest);
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest, loggerService);
             }
             catch (RepositoryException ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError);
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, loggerService);
             }
             catch (ValidFileContentException ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest);
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest, loggerService);
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError);
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, loggerService);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception, HttpStatusCode httpStatusCode)
+        private async Task HandleExceptionAsync(
+            HttpContext httpContext, 
+            Exception exception, 
+            HttpStatusCode httpStatusCode,
+            ILoggerService loggerService)
         {
             var title = exception is BusinessException
                 ? RuLocalization.GetLocalizedMessage((exception as BusinessException)!)
@@ -65,6 +72,8 @@ namespace AdvertisingPlatforms.Middlewares
             {
                 AddDetailsForDevelopment(exception, exceptionInfo);
             }
+
+            loggerService.LogError(exceptionInfo);
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)httpStatusCode;

@@ -43,5 +43,10 @@
             StackTrace = stackTrace;
             InnerExceptionInfo = null;
         }
+
+        public override string ToString()
+        {
+            return $"Title: {Title}\nType: {Type}\nEndPoint: {EndPoint}\nStackTrace: {StackTrace}\n: InnerExceptionInfo: {InnerExceptionInfo}";
+        }
     }
 }

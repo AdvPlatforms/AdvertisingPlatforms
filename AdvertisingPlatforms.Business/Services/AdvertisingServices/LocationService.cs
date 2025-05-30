@@ -11,10 +11,12 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     public class LocationService : ILocationService
     {
         private readonly Repository<Location> _locationRepository;
+        private readonly ILoggerService _loggerService;
 
-        public LocationService(Repository<Location> locationRepository)
+        public LocationService(Repository<Location> locationRepository, ILoggerService loggerService)
         {
             _locationRepository = locationRepository;
+            _loggerService = loggerService;
         }
 
         /// <summary>
@@ -24,7 +26,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Location.</returns>
         public Location? GetByName(string name)
         {
-            return _locationRepository.GetByNameFromRepository(name);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetByName));
+            var result = _locationRepository.GetByNameFromRepository(name);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetByName));
+            return result;
         }
 
         /// <summary>
@@ -35,7 +41,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
 
         public Location? GetById(int id)
         {
-            return _locationRepository.GetByIdFromRepository(id);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetById));
+            var result = _locationRepository.GetByIdFromRepository(id);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetById));
+            return result;
         }
 
         /// <summary>
@@ -45,8 +55,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Count new entities.</returns>
         public int ReplaceRepository(IReadOnlyList<Location> newEntitiesList)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             _locationRepository.ReplaceRepository(newEntitiesList);
 
+            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
             return newEntitiesList.Count;
         }
     }
