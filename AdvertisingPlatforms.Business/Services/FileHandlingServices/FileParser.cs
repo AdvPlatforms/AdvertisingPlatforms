@@ -3,6 +3,7 @@ using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 {
@@ -31,10 +32,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
             var sortFileContent = GetSortFileContent(fileContent);
 
-            var advertisingPlatforms = sortFileContent
-                .SelectMany(x => x.Value)
-                .Distinct()
-                .Select((x, Index) => new Advertising(Index + 1) { Name = x });
+            var advertisingPlatforms = GetAdvertising(sortFileContent);
 
             var locations = sortFileContent
                 .Select((x, Index) => new Location(Index + 1) { Name = x.Key });
@@ -68,17 +66,21 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
         private IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetSortFileContent(string fileContent)
         {
-            var sortFileContent = fileContent
-                .Split(FileConstants.RowsSplitter)
-                .Where(x => _regex.IsMatch(x))
-                .Select(x => x.Split(FileConstants.Splitter))
-                .Where(x => x.Length == 2)
-                .Select(x =>
-                    AddDirectAdvertising(x[0].Trim(), x[1].Split(FileConstants.EntitiesSplitter))
-                )
-                .SelectMany(x => x);
+            var advertisingLocationsPair = GetAdvertisingLocationsPair(fileContent);
 
-            return AddAdditionalAdvertising(sortFileContent);
+            var dataWithDirectAdvertising = GetDataWithDirectAdvertising(advertisingLocationsPair);
+
+            var sortFileContent = GetDataWithAdditionalAdvertising(dataWithDirectAdvertising);
+
+            return sortFileContent;
+        }
+
+        private IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetDataWithDirectAdvertising(IEnumerable<string[]> advertisingLocationsPair)
+        {
+            return advertisingLocationsPair
+                .SelectMany(x =>
+                    AddDirectAdvertising(x[0].Trim(), x[1].Split(FileConstants.EntitiesSplitter))
+                );
         }
 
         private IEnumerable<KeyValuePair<string, IEnumerable<string>>> AddDirectAdvertising(string advertisingPlatformName, IEnumerable<string> locationNames)
@@ -87,7 +89,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                 .Select(x => new KeyValuePair<string,IEnumerable<string>>(x, [advertisingPlatformName]));
         }
 
-        private IEnumerable<KeyValuePair<string, IEnumerable<string>>> AddAdditionalAdvertising(IEnumerable<KeyValuePair<string, IEnumerable<string>>> sortFileContent)
+        private IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetDataWithAdditionalAdvertising(IEnumerable<KeyValuePair<string, IEnumerable<string>>> sortFileContent)
         {
             return sortFileContent
                 .Select(x => new KeyValuePair<string, IEnumerable<string>>(x.Key, GetAllAdvertisingForLocation(x.Key, sortFileContent)));
@@ -101,6 +103,29 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                 .Distinct();
         }
 
+        private IEnumerable<Advertising> GetAdvertising(IEnumerable<KeyValuePair<string, IEnumerable<string>>> sortFileContent)
+        {
+            var advertisingNames = sortFileContent
+                .SelectMany(x => x.Value)
+                .Distinct();
 
+            var AdvertisingCollection = CreateAdvertising(advertisingNames);
+
+            return AdvertisingCollection; 
+        }
+
+        private IEnumerable<Advertising> CreateAdvertising(IEnumerable<string> advertisingNames)
+        {
+            return advertisingNames.Select((x, Index) => new Advertising(Index + 1) { Name = x });
+        }
+
+        private IEnumerable<string[]> GetAdvertisingLocationsPair(string fileContent)
+        {
+            return fileContent
+                .Split(FileConstants.RowsSplitter)
+                .Where(x => _regex.IsMatch(x))
+                .Select(x => x.Split(FileConstants.Splitter))
+                .Where(x => x.Length == 2);
+        }
     }
 }
