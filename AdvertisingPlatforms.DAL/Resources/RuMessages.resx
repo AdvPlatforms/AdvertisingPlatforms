@@ -165,4 +165,7 @@
   <data name="Сonfiguration service has not been initialized." xml:space="preserve">
     <value>Сервис конфигурации не был инициализирован.</value>
   </data>
+  <data name="Couldn't get information about the method by id." xml:space="preserve">
+    <value>Не удалось получить информацию о методе по id.</value>
+  </data>
 </root>

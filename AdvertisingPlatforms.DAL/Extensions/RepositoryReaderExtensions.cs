@@ -18,9 +18,9 @@ namespace AdvertisingPlatforms.DAL.Extensions
         /// <param name="filePath">Path for file.</param>
         /// <param name="data">Data from repository.</param>
         /// <returns></returns>
-        public static bool TryReadData<TResource>(this RepositoryReader _, string filePath, [NotNullWhen(true)] out List<TResource>? data, ILoggerService? loggerService = null) where TResource : Resource
+        public static bool TryReadData<TResource>(this RepositoryReader _, string filePath, [NotNullWhen(true)] out List<TResource>? data, ILoggerService loggerService) where TResource : Resource
         {
-            loggerService?.LogStart(nameof(RepositoryReaderExtensions), nameof(TryReadData));
+            var logId = loggerService.LogStart(nameof(RepositoryReaderExtensions), nameof(TryReadData));
             data = null;
 
             using StreamReader sr = new StreamReader(Path.Combine(AppContext.BaseDirectory, filePath));
@@ -28,7 +28,7 @@ namespace AdvertisingPlatforms.DAL.Extensions
 
             if (string.IsNullOrEmpty(jsonDb))
             {
-                loggerService?.LogInfo(ErrorConstants.ReadRepository,nameof(RepositoryReaderExtensions), nameof(TryReadData));
+                loggerService.LogInfo(ErrorConstants.ReadRepository,nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
 
@@ -36,17 +36,17 @@ namespace AdvertisingPlatforms.DAL.Extensions
             {
                 data = JsonSerializer.Deserialize<List<TResource>>(jsonDb);
 
-                loggerService?.LogEnd(nameof(RepositoryReaderExtensions), nameof(TryReadData));
+                loggerService.LogEnd(logId);
                 return data != null;
             }
             catch (JsonException)
             {
-                loggerService?.LogInfo(nameof(JsonException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
+                loggerService.LogInfo(nameof(JsonException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
             catch (NotSupportedException)
             {
-                loggerService?.LogInfo(nameof(NotSupportedException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
+                loggerService.LogInfo(nameof(NotSupportedException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
         }

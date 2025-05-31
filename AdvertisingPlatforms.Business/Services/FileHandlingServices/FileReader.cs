@@ -31,7 +31,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// <exception cref="ValidFileContentException"></exception>
         public async Task<AdvertisingInformation?> GetDataFromFileAsync(Microsoft.AspNetCore.Http.IFormFile file)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetDataFromFileAsync));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetDataFromFileAsync));
 
             using StreamReader streamReader = new(file.OpenReadStream());
 
@@ -52,7 +52,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                 throw new ValidFileContentException(ErrorConstants.NoCorrectFileData);
             }
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetDataFromFileAsync));
+            _loggerService.LogEnd(logId);
             return result;
         }
     }

@@ -27,7 +27,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// <returns>Data.</returns>
         public AdvertisingInformation GetParseData(string fileContent)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetParseData));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetParseData));
 
             var sortFileContent = GetSortFileContent(fileContent);
 
@@ -47,7 +47,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                 advertisingPlatforms.ToList(),
                 locations.ToList());
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetParseData));
+            _loggerService.LogEnd(logId);
             return result;
         }
 

@@ -20,5 +20,6 @@
         public const string ServerError = "Server error.";
         public const string ConfigurationRead = "Couldn't read data from configuration file.";
         public const string ConfigNotInitialized = "Configuration service has not been initialized.";
+        public const string LoggerService = "Couldn't get information about the method by id.";
     }
 }

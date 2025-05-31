@@ -28,10 +28,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>List of advertising or null.</returns>
         public List<Advertising>? GetAllByIds(List<int> advertisingIds)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetAllByIds));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetAllByIds));
             var result = _advertisingPlatformPlatformsRepository.GetByIdFromRepository(advertisingIds);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetAllByIds));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -42,11 +42,11 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Count new entities.</returns>
         public int ReplaceRepository(IReadOnlyList<Advertising> newEntitiesList)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             
             _advertisingPlatformPlatformsRepository.ReplaceRepository(newEntitiesList);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
+            _loggerService.LogEnd(logId);
             return newEntitiesList.Count;
         }
     }

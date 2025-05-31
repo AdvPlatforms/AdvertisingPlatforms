@@ -36,7 +36,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <exception cref="GetAdvertisingException"></exception>
         public IReadOnlyList<string>? GetAdvertisingPlatformsForLocation(string locationName)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));
             var locationId = _locationService.GetByName(locationName)?.Id 
                 ?? throw new GetAdvertisingException(ErrorConstants.NotFound);
 
@@ -46,17 +46,17 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
                 .Select(x => x.Name)
                 .ToList();
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetAdvertisingPlatformsForLocation));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
         public int ReplaceRepository(IReadOnlyList<AdvertisingPlatform> newEntitiesList)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
 
             _advertisingPlatformRepository.ReplaceRepository(newEntitiesList);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
+            _loggerService.LogEnd(logId);
             return newEntitiesList.Count;
         }
     }

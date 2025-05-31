@@ -46,6 +46,10 @@ namespace AdvertisingPlatforms.Middlewares
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.BadRequest, loggerService);
             }
+            catch (LoggerServiceException ex)
+            {
+                await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, loggerService);
+            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(httpContext, ex, HttpStatusCode.InternalServerError, loggerService);

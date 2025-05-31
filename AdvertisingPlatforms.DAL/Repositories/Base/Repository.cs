@@ -46,9 +46,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity"></param>
         public void AddToRepository(TResource entity)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(AddToRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(AddToRepository));
             _fileRepository.AddToRepository(entity, _repositoryReader, _repositoryWriter);
-            _loggerService.LogEnd(this.GetType().Name, nameof(AddToRepository));
+            _loggerService.LogEnd(logId);
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="id">id of entity.</param>
         public void DeleteFromRepository(int id)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(DeleteFromRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(DeleteFromRepository));
             _fileRepository.DeleteFromRepository(id, _repositoryReader, _repositoryWriter);
-            _loggerService.LogEnd(this.GetType().Name, nameof(DeleteFromRepository));
+            _loggerService.LogEnd(logId);
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetByIdFromRepository(id, _repositoryReader);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetByIdFromRepository));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -83,10 +83,10 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public List<TResource> GetByIdFromRepository(List<int> ids)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetByIdFromRepository));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -97,10 +97,10 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public TResource? GetByNameFromRepository(string name)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetByNameFromRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByNameFromRepository));
             var result = _fileRepository.GetByNameFromRepository(name, _repositoryReader);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetByNameFromRepository));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -110,9 +110,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entities">New entities for overwrite repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             _fileRepository.ReplaceRepository(entities, _repositoryWriter);
-            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
+            _loggerService.LogEnd(logId);
         }
 
         /// <summary>
@@ -121,9 +121,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity">Entity for update.</param>
         public void UpdateInRepository(TResource entity)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(UpdateInRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(UpdateInRepository));
             _fileRepository.UpdateInRepository(entity, _repositoryReader, _repositoryWriter);
-            _loggerService.LogEnd(this.GetType().Name, nameof(UpdateInRepository));
+            _loggerService.LogEnd(logId);
         }
     }
 }

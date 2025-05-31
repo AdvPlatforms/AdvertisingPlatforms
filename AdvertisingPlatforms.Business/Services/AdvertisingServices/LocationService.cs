@@ -26,10 +26,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Location.</returns>
         public Location? GetByName(string name)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetByName));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByName));
             var result = _locationRepository.GetByNameFromRepository(name);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetByName));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -41,10 +41,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
 
         public Location? GetById(int id)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(GetById));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetById));
             var result = _locationRepository.GetByIdFromRepository(id);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(GetById));
+            _loggerService.LogEnd(logId);
             return result;
         }
 
@@ -55,10 +55,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// <returns>Count new entities.</returns>
         public int ReplaceRepository(IReadOnlyList<Location> newEntitiesList)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             _locationRepository.ReplaceRepository(newEntitiesList);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
+            _loggerService.LogEnd(logId);
             return newEntitiesList.Count;
         }
     }

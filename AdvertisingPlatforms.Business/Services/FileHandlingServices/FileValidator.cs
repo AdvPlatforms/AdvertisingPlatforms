@@ -23,7 +23,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// <returns>(True + null) or (false + error).</returns>
         public (bool result, string? error) IsValidAdvertisingData(string? data)
         {
-            _loggerService.LogStart(this.GetType().Name, nameof(IsValidAdvertisingData));
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(IsValidAdvertisingData));
 
             if(string.IsNullOrEmpty(data))
                 return (false, ErrorConstants.NoDataFile);
@@ -38,7 +38,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                !Regex.IsMatch(data, FileConstants.RowPattern))
                 return (false, ErrorConstants.NoCorrectFileData);
 
-            _loggerService.LogEnd(this.GetType().Name, nameof(IsValidAdvertisingData));
+            _loggerService.LogEnd(logId);
             return (true, null);
         }
     }
