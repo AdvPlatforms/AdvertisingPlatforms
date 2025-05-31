@@ -38,6 +38,7 @@ namespace AdvertisingPlatforms.Business.ServiceCollection
         public static void AddLogServices(this IServiceCollection services)
         {
             services.AddScoped<ILoggerService, LoggerService>();
+            services.AddHttpContextAccessor();
         }
     }
 }

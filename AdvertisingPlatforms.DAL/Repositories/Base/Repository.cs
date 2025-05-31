@@ -1,6 +1,7 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
 using AdvertisingPlatforms.DAL.FileAccess;
 using AdvertisingPlatforms.DAL.Interfaces;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
 namespace AdvertisingPlatforms.DAL.Repositories.Base
@@ -14,10 +15,15 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         private readonly FileRepository<TResource> _fileRepository;
         private readonly IRepositoryReader _repositoryReader;
         private readonly IRepositoryWriter _repositoryWriter;
-        public Repository(IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
+        private readonly ILoggerService _loggerService;
+        public Repository(
+            IRepositoryReader repositoryReader, 
+            IRepositoryWriter repositoryWriter, 
+            ILoggerService loggerService)
         {
             _repositoryReader = repositoryReader;
             _repositoryWriter = repositoryWriter;
+            _loggerService = loggerService;
 
             var filePath = GetFilePath();
             _fileRepository = new FileRepository<TResource>(filePath);
@@ -40,7 +46,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity"></param>
         public void AddToRepository(TResource entity)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(AddToRepository));
             _fileRepository.AddToRepository(entity, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(this.GetType().Name, nameof(AddToRepository));
         }
 
         /// <summary>
@@ -49,7 +57,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="id">id of entity.</param>
         public void DeleteFromRepository(int id)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(DeleteFromRepository));
             _fileRepository.DeleteFromRepository(id, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(this.GetType().Name, nameof(DeleteFromRepository));
         }
 
         /// <summary>
@@ -59,7 +69,11 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id)
         {
-            return _fileRepository.GetByIdFromRepository(id, _repositoryReader);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetByIdFromRepository(id, _repositoryReader);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetByIdFromRepository));
+            return result;
         }
 
         /// <summary>
@@ -69,7 +83,11 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public List<TResource> GetByIdFromRepository(List<int> ids)
         {
-            return _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetByIdFromRepository));
+            return result;
         }
 
         /// <summary>
@@ -79,7 +97,11 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public TResource? GetByNameFromRepository(string name)
         {
-            return _fileRepository.GetByNameFromRepository(name, _repositoryReader);
+            _loggerService.LogStart(this.GetType().Name, nameof(GetByNameFromRepository));
+            var result = _fileRepository.GetByNameFromRepository(name, _repositoryReader);
+
+            _loggerService.LogEnd(this.GetType().Name, nameof(GetByNameFromRepository));
+            return result;
         }
 
         /// <summary>
@@ -88,7 +110,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entities">New entities for overwrite repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             _fileRepository.ReplaceRepository(entities, _repositoryWriter);
+            _loggerService.LogEnd(this.GetType().Name, nameof(ReplaceRepository));
         }
 
         /// <summary>
@@ -97,7 +121,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity">Entity for update.</param>
         public void UpdateInRepository(TResource entity)
         {
+            _loggerService.LogStart(this.GetType().Name, nameof(UpdateInRepository));
             _fileRepository.UpdateInRepository(entity, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(this.GetType().Name, nameof(UpdateInRepository));
         }
     }
 }
