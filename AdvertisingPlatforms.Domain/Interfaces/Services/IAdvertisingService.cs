@@ -14,6 +14,6 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// <param name="advertisingIds">ID of advertising platform.</param>
         /// <returns>List of advertising or null.</returns>
         /// <exception cref="GetAdvertisingException"></exception>
-        public List<Advertising>? GetAllByIds(List<int> advertisingIds);
+        public List<Advertising>? GetAllByIds(IEnumerable<int> advertisingIds);
     }
 }

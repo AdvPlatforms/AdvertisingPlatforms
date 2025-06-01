@@ -26,7 +26,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
         /// </summary>
         /// <param name="advertisingIds">ID of advertising platform.</param>
         /// <returns>List of advertising or null.</returns>
-        public List<Advertising>? GetAllByIds(List<int> advertisingIds)
+        public List<Advertising>? GetAllByIds(IEnumerable<int> advertisingIds)
         {
             var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetAllByIds));
             var result = _advertisingPlatformPlatformsRepository.GetByIdFromRepository(advertisingIds);

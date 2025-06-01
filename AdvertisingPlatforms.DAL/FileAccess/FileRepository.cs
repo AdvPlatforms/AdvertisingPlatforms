@@ -67,7 +67,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <param name="ids">id of entity.</param>
         /// <param name="repositoryReader">Reader for repository.</param>
         /// <returns>List of entities for success, empty collection for fail.</returns>
-        public List<TResource> GetByIdFromRepository(List<int> ids, IRepositoryReader repositoryReader)
+        public List<TResource> GetByIdFromRepository(IEnumerable<int> ids, IRepositoryReader repositoryReader)
         {
             return repositoryReader.GetAllFromFile<TResource>(_filePath).Where(x => ids.Contains(x.Id)).ToList();
         }

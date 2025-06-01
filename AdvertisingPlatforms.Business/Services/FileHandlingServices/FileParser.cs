@@ -30,20 +30,24 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         {
             var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetParseData));
 
-            var sortFileContent = GetSortFileContent(fileContent);
-
+            var sortFileContent = GetSortFileContent(fileContent).ToDictionary();
+            //5.9kb
             var advertisingPlatforms = GetAdvertising(sortFileContent);
-
+            //6.05kb
             var locations = sortFileContent
                 .Select((x, Index) => new Location(Index + 1) { Name = x.Key });
-
+            //6.23kb
             var advertisingInLocations =
                 GetAdvertisingInLocations(sortFileContent, advertisingPlatforms, locations);
-
+            //25.64kb
             var result = new AdvertisingInformation(
                 advertisingInLocations.ToList(),
                 advertisingPlatforms.ToList(),
                 locations.ToList());
+
+            //For benchmark
+            //GC.Collect();
+
 
             _loggerService.LogEnd(logId);
             return result;
@@ -60,7 +64,7 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
                     locations.First(y=>y.Name == x.Key).Id,
                     advertisingPlatforms
                         .Join(x.Value, a => a.Name , d=>d , (a, d) => a.Id )
-                        .ToList()
+                        //.ToList()
                 ));
         }
 
@@ -85,8 +89,13 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
         private IEnumerable<KeyValuePair<string, IEnumerable<string>>> AddDirectAdvertising(string advertisingPlatformName, IEnumerable<string> locationNames)
         {
-            return locationNames
-                .Select(x => new KeyValuePair<string,IEnumerable<string>>(x, [advertisingPlatformName]));
+            //return locationNames
+            //    .Select(x => new KeyValuePair<string,IEnumerable<string>>(x, [advertisingPlatformName]));
+
+            foreach (var item in locationNames)
+            {
+                yield return new KeyValuePair<string, IEnumerable<string>>(item, [advertisingPlatformName]);
+            }
         }
 
         private IEnumerable<KeyValuePair<string, IEnumerable<string>>> GetDataWithAdditionalAdvertising(IEnumerable<KeyValuePair<string, IEnumerable<string>>> sortFileContent)

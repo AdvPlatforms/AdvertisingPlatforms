@@ -81,7 +81,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// </summary>
         /// <param name="ids">id of entity.</param>
         /// <returns>List of entities for success, null for fail.</returns>
-        public List<TResource> GetByIdFromRepository(List<int> ids)
+        public List<TResource> GetByIdFromRepository(IEnumerable<int> ids)
         {
             var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetByIdFromRepository(ids, _repositoryReader);

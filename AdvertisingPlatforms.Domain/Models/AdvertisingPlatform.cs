@@ -18,7 +18,7 @@ namespace AdvertisingPlatforms.Domain.Models
         /// <summary>
         /// IDs of advertising platforms  available for the location.
         /// </summary>
-        public List<int> AdvertisingIds { get; set; }
+        public IEnumerable<int> AdvertisingIds { get; set; }
 
         /// <summary>
         /// Create a model that displays the availability of advertising platforms for a location.
@@ -26,7 +26,7 @@ namespace AdvertisingPlatforms.Domain.Models
         /// <param name="id">ID of model.</param>
         /// <param name="locationId">ID of location.</param>
         /// <param name="advertisingIds">IDs of advertising platforms  available for the location.</param>
-        public AdvertisingPlatform(int id, int locationId, List<int> advertisingIds)
+        public AdvertisingPlatform(int id, int locationId, IEnumerable<int> advertisingIds)
         {
             Id = id;
             LocationId = locationId;
