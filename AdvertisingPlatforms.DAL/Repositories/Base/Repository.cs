@@ -63,6 +63,19 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         }
 
         /// <summary>
+        /// Get all form repository.
+        /// </summary>
+        /// <returns>Entity for success, null for fail.</returns>
+        public IEnumerable<TResource>? GetAllFromRepository()
+        {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetAllFromRepository(_repositoryReader);
+
+            _loggerService.LogEnd(logId);
+            return result;
+        }
+
+        /// <summary>
         /// Get entity by id form repository.
         /// </summary>
         /// <param name="id">id of entity.</param>

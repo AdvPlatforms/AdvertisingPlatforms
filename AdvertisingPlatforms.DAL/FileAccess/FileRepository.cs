@@ -28,6 +28,12 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         public void AddToRepository(TResource entity, IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
         {
             var repositoryEntities = repositoryReader.GetAllFromFile<TResource>(_filePath);
+
+            var haveEntity = repositoryEntities.Find(x=> x.Id == entity.Id);
+
+            if (haveEntity != null)
+                throw new RepositoryException(ErrorConstants.Argument);
+
             repositoryEntities.Add(entity);
             repositoryWriter.SaveChangesToFile( _filePath,repositoryEntities);
         }
@@ -44,10 +50,25 @@ namespace AdvertisingPlatforms.DAL.FileAccess
 
             var entityForDelete = repositoryEntities.Find(x => x.Id == id);
 
-            if (entityForDelete == null) return;
-            
+            if (entityForDelete == null)
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
+
             repositoryEntities.Remove(entityForDelete);
             repositoryWriter.SaveChangesToFile(_filePath, repositoryEntities);
+        }
+
+        /// <summary>
+        /// Get all from repository.
+        /// </summary>
+        /// <param name="repositoryReader">Reader for repository.</param>
+        public IEnumerable<TResource>? GetAllFromRepository(IRepositoryReader repositoryReader)
+        {
+            var result = repositoryReader.GetAllFromFile<TResource>(_filePath);
+
+            if (result == null)
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
+
+            return result;
         }
 
         /// <summary>
@@ -58,7 +79,12 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id, IRepositoryReader repositoryReader)
         {
-            return repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Id == id);
+            var result = repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Id == id);
+
+            if (result == null)
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
+
+            return result;
         }
 
         /// <summary>
@@ -69,7 +95,12 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <returns>List of entities for success, empty collection for fail.</returns>
         public List<TResource> GetByIdFromRepository(IEnumerable<int> ids, IRepositoryReader repositoryReader)
         {
-            return repositoryReader.GetAllFromFile<TResource>(_filePath).Where(x => ids.Contains(x.Id)).ToList();
+            var result = repositoryReader.GetAllFromFile<TResource>(_filePath).Where(x => ids.Contains(x.Id)).ToList();
+
+            if (result.Count == 0)
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
+
+            return result;
         }
 
         /// <summary>
@@ -79,7 +110,12 @@ namespace AdvertisingPlatforms.DAL.FileAccess
         /// <returns>Entity for success, null for fail</returns>
         public TResource? GetByNameFromRepository(string name, IRepositoryReader repositoryReader)
         {
-            return repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Name == name);
+            var result = repositoryReader.GetAllFromFile<TResource>(_filePath).Find(x => x.Name == name);
+
+            if (result == null)
+                throw new RepositoryException(ErrorConstants.EntityNotFound);
+
+            return result;
         }
 
         /// <summary>
@@ -108,7 +144,7 @@ namespace AdvertisingPlatforms.DAL.FileAccess
             if (entityForUpdate == null)
                 throw new RepositoryException(ErrorConstants.EntityNotFound);
 
-            entityForUpdate = entity;
+            entityForUpdate.Name = entity.Name;
             repositoryWriter.SaveChangesToFile(_filePath, repositoryEntities);
         }
     }

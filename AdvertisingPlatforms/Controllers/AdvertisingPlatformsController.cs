@@ -15,17 +15,20 @@ namespace AdvertisingPlatforms.Controllers
         private readonly IAdvertisingService _advertisingService;
         private readonly ILocationService _locationService;
         private readonly IFileReader _reader;
+        private readonly ILoggerService _loggerService;
         private const string PrefLocationName = @"/";
 
         public AdvertisingPlatformsController(
             IAdvertisingPlatformService advertisingPlatformService,
             IAdvertisingService advertisingService,
             ILocationService locationService,
+            ILoggerService loggerService,
             IFileReader reader)
         {
             _advertisingPlatformService = advertisingPlatformService;
             _advertisingService = advertisingService;
             _locationService = locationService;
+            _loggerService = loggerService;
             _reader = reader;
         }
 
@@ -34,15 +37,18 @@ namespace AdvertisingPlatforms.Controllers
         /// </summary>
         /// <param name="location">Location to search for advertising platforms.</param>
         [HttpGet("{*location}")]
-        [ProducesResponseType<AdvertisingsResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType<AdvertisingPlatformsResult>(StatusCodes.Status200OK)]
         public IActionResult GetAdvertisingPlatforms(string location)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetAdvertisingPlatforms));
+
             string locationName = PrefLocationName + location;
             var advertisingForLocation = _advertisingPlatformService.GetAdvertisingPlatformsForLocation(locationName);
 
-            var okResult = new AdvertisingsResult(advertisingForLocation!);
-            return Ok(okResult);
-         
+            var okResult = new AdvertisingPlatformsResult(advertisingForLocation!);
+
+            _loggerService.LogEnd(logId);
+            return Ok(okResult);        
         }
 
         /// <summary>
@@ -50,16 +56,20 @@ namespace AdvertisingPlatforms.Controllers
         /// </summary>
         /// <param name="file">File with new advertising data.</param>
         [HttpPost]
-        [ProducesResponseType<AdvertisingUpdateResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType<AdvertisingPlatformsUpdateResult>(StatusCodes.Status200OK)]
         public async Task<IActionResult> ReplaceAdvertisingData(IFormFile file)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceAdvertisingData));
+
             var data = await _reader.GetDataFromFileAsync(file);
 
             _advertisingPlatformService.ReplaceRepository(data!.AdvertisingPlatforms);
             var countAdvertising = _advertisingService.ReplaceRepository(data.Advertising);
             var countLocations = _locationService.ReplaceRepository(data.Locations);
 
-            var okResult = new AdvertisingUpdateResult(countAdvertising, countLocations);
+            var okResult = new AdvertisingPlatformsUpdateResult(countAdvertising, countLocations);
+
+            _loggerService.LogEnd(logId);
             return Ok(okResult);
         }
     }

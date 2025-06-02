@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Include="Exceptions\ValidFileContentException.cs" />
+    <None Include="Models\ResponseApi\AdvertisingResult.cs" />
   </ItemGroup>
 
   <ItemGroup>

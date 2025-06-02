@@ -20,5 +20,29 @@ namespace AdvertisingPlatforms.Domain.Interfaces.Services
         /// <param name="id">ID of location.</param>
         /// <returns>Location.</returns>
         public Location? GetById(int id);
+
+        /// <summary>
+        /// Get all locations.
+        /// </summary>
+        /// <returns>Collection locations or null.</returns>
+        public IEnumerable<Location>? GetAll();
+
+        /// <summary>
+        /// Delete location.
+        /// </summary>
+        /// <param name="id">Id for location.</param>
+        public void Delete(int id);
+
+        /// <summary>
+        /// Update location.
+        /// </summary>
+        /// <param name="location">Location.</param>
+        public void Update(Location location);
+
+        /// <summary>
+        /// Add location.
+        /// </summary>
+        /// <param name="location">Location.</param>
+        public void Add(Location location);
     }
 }
