@@ -2,6 +2,9 @@
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 using System.Text.Json;
 using AdvertisingPlatforms.DAL.FileAccess;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
+using System.Runtime.CompilerServices;
+using AdvertisingPlatforms.DAL.Const;
 
 namespace AdvertisingPlatforms.DAL.Extensions
 {
@@ -15,8 +18,9 @@ namespace AdvertisingPlatforms.DAL.Extensions
         /// <param name="filePath">Path for file.</param>
         /// <param name="data">Data from repository.</param>
         /// <returns></returns>
-        public static bool TryReadData<TResource>(this RepositoryReader _, string filePath, [NotNullWhen(true)] out List<TResource>? data) where TResource : Resource
+        public static bool TryReadData<TResource>(this RepositoryReader _, string filePath, [NotNullWhen(true)] out List<TResource>? data, ILoggerService loggerService) where TResource : Resource
         {
+            var logId = loggerService.LogStart(nameof(RepositoryReaderExtensions), nameof(TryReadData));
             data = null;
 
             using StreamReader sr = new StreamReader(Path.Combine(AppContext.BaseDirectory, filePath));
@@ -24,7 +28,7 @@ namespace AdvertisingPlatforms.DAL.Extensions
 
             if (string.IsNullOrEmpty(jsonDb))
             {
-                
+                loggerService.LogInfo(ErrorConstants.ReadRepository,nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
 
@@ -32,14 +36,17 @@ namespace AdvertisingPlatforms.DAL.Extensions
             {
                 data = JsonSerializer.Deserialize<List<TResource>>(jsonDb);
 
+                loggerService.LogEnd(logId);
                 return data != null;
             }
             catch (JsonException)
             {
+                loggerService.LogInfo(nameof(JsonException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
             catch (NotSupportedException)
             {
+                loggerService.LogInfo(nameof(NotSupportedException), nameof(RepositoryReaderExtensions), nameof(TryReadData));
                 return false;
             }
         }

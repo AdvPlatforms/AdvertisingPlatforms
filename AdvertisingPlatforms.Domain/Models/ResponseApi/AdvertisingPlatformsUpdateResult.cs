@@ -5,7 +5,7 @@ namespace AdvertisingPlatforms.Domain.Models.ResponseApi
     /// <summary>
     /// Information about the number of updated entities.
     /// </summary>
-    public class AdvertisingUpdateResult: BaseResponse
+    public class AdvertisingPlatformsUpdateResult: BaseResponse
     {
         /// <summary>
         /// Count of adds advertising platforms.
@@ -22,7 +22,7 @@ namespace AdvertisingPlatforms.Domain.Models.ResponseApi
         /// </summary>
         /// <param name="countAdvertisingPlatforms">Count of adds advertising platforms.</param>
         /// <param name="countLocations">Count of adds locations.</param>
-        public AdvertisingUpdateResult(int countAdvertisingPlatforms, int countLocations) : base(true)
+        public AdvertisingPlatformsUpdateResult(int countAdvertisingPlatforms, int countLocations) : base(true)
         {
             CountAdvertisingPlatforms = countAdvertisingPlatforms;
             CountLocations = countLocations;

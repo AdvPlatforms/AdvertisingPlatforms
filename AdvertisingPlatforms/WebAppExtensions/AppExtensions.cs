@@ -1,4 +1,5 @@
 ﻿using AdvertisingPlatforms.Middlewares;
+using AdvertisingPlatforms.DAL.WebAppExtensions;
 
 namespace AdvertisingPlatforms.WebAppExtensions
 {
@@ -13,6 +14,8 @@ namespace AdvertisingPlatforms.WebAppExtensions
         /// <param name="app">Web application.</param>
         public static void ConfigureApp(this WebApplication app)
         {
+            app.ConfigureDal();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

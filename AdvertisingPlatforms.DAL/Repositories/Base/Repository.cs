@@ -1,6 +1,7 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
 using AdvertisingPlatforms.DAL.FileAccess;
 using AdvertisingPlatforms.DAL.Interfaces;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
 namespace AdvertisingPlatforms.DAL.Repositories.Base
@@ -14,10 +15,15 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         private readonly FileRepository<TResource> _fileRepository;
         private readonly IRepositoryReader _repositoryReader;
         private readonly IRepositoryWriter _repositoryWriter;
-        public Repository(IRepositoryReader repositoryReader, IRepositoryWriter repositoryWriter)
+        private readonly ILoggerService _loggerService;
+        public Repository(
+            IRepositoryReader repositoryReader, 
+            IRepositoryWriter repositoryWriter, 
+            ILoggerService loggerService)
         {
             _repositoryReader = repositoryReader;
             _repositoryWriter = repositoryWriter;
+            _loggerService = loggerService;
 
             var filePath = GetFilePath();
             _fileRepository = new FileRepository<TResource>(filePath);
@@ -27,9 +33,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         {
             return typeof(TResource).Name switch
             {
-                "Location" => DbConfig.LocationsDbPath,
-                "AdvertisingPlatform" => DbConfig.AdvertisingPlatformsDbPath,
-                "AdvertisingInLocation" => DbConfig.AdvertisingInLocationDbPath,
+                "Location" => DbConfig.LocationDbPath,
+                "Advertising" => DbConfig.AdvertisingDbPath,
+                "AdvertisingPlatform" => DbConfig.AdvertisingPlatformDbPath,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -40,7 +46,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity"></param>
         public void AddToRepository(TResource entity)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(AddToRepository));
             _fileRepository.AddToRepository(entity, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(logId);
         }
 
         /// <summary>
@@ -49,7 +57,22 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="id">id of entity.</param>
         public void DeleteFromRepository(int id)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(DeleteFromRepository));
             _fileRepository.DeleteFromRepository(id, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(logId);
+        }
+
+        /// <summary>
+        /// Get all form repository.
+        /// </summary>
+        /// <returns>Entity for success, null for fail.</returns>
+        public IEnumerable<TResource>? GetAllFromRepository()
+        {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetAllFromRepository(_repositoryReader);
+
+            _loggerService.LogEnd(logId);
+            return result;
         }
 
         /// <summary>
@@ -59,7 +82,11 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id)
         {
-            return _fileRepository.GetByIdFromRepository(id, _repositoryReader);
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetByIdFromRepository(id, _repositoryReader);
+
+            _loggerService.LogEnd(logId);
+            return result;
         }
 
         /// <summary>
@@ -67,9 +94,13 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// </summary>
         /// <param name="ids">id of entity.</param>
         /// <returns>List of entities for success, null for fail.</returns>
-        public List<TResource> GetByIdFromRepository(List<int> ids)
+        public List<TResource> GetByIdFromRepository(IEnumerable<int> ids)
         {
-            return _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var result = _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
+
+            _loggerService.LogEnd(logId);
+            return result;
         }
 
         /// <summary>
@@ -79,7 +110,11 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public TResource? GetByNameFromRepository(string name)
         {
-            return _fileRepository.GetByNameFromRepository(name, _repositoryReader);
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByNameFromRepository));
+            var result = _fileRepository.GetByNameFromRepository(name, _repositoryReader);
+
+            _loggerService.LogEnd(logId);
+            return result;
         }
 
         /// <summary>
@@ -88,7 +123,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entities">New entities for overwrite repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
             _fileRepository.ReplaceRepository(entities, _repositoryWriter);
+            _loggerService.LogEnd(logId);
         }
 
         /// <summary>
@@ -97,7 +134,9 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity">Entity for update.</param>
         public void UpdateInRepository(TResource entity)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(UpdateInRepository));
             _fileRepository.UpdateInRepository(entity, _repositoryReader, _repositoryWriter);
+            _loggerService.LogEnd(logId);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿//using AdvertisingPlatforms.Controllers;
-//using AdvertisingPlatforms.Domain.Interfaces;
+﻿//using Advertising.Controllers;
+//using Advertising.Domain.Interfaces;
 //using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Mvc;
 //using Moq;

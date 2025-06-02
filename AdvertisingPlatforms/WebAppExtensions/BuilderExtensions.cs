@@ -20,11 +20,15 @@ namespace AdvertisingPlatforms.WebAppExtensions
             builder.Services.AddAdvertisingServices();
             builder.Services.AddRepositoryServices();
             builder.Services.AddFileServices();
+            builder.Services.AddLogServices();
+
+            builder.ConfigureBusiness();
 
             if (builder.Environment.IsDevelopment())
             {
                 builder.Services.AddSwaggerServices();
             }
+
         }
     }
 }

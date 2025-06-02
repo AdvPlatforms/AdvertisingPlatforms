@@ -1,5 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models.ResponseApi;
@@ -11,21 +11,24 @@ namespace AdvertisingPlatforms.Controllers
     [Route("/api/v1/[controller]")]
     public class AdvertisingPlatformsController : Controller
     {
-        private readonly IAdvertisingInLocationService _advertisingsInLocationService;
-        private readonly IAdvertisingPlatformsService _advertisitngPlatformsService;
-        private readonly ILocationsService _locationsService;
+        private readonly IAdvertisingPlatformService _advertisingPlatformService;
+        private readonly IAdvertisingService _advertisingService;
+        private readonly ILocationService _locationService;
         private readonly IFileReader _reader;
+        private readonly ILoggerService _loggerService;
         private const string PrefLocationName = @"/";
 
         public AdvertisingPlatformsController(
-            IAdvertisingInLocationService advertisingsInLocationService,
-            IAdvertisingPlatformsService platformsService,
-            ILocationsService locationsService,
+            IAdvertisingPlatformService advertisingPlatformService,
+            IAdvertisingService advertisingService,
+            ILocationService locationService,
+            ILoggerService loggerService,
             IFileReader reader)
         {
-            _advertisingsInLocationService = advertisingsInLocationService;
-            _advertisitngPlatformsService = platformsService;
-            _locationsService = locationsService;
+            _advertisingPlatformService = advertisingPlatformService;
+            _advertisingService = advertisingService;
+            _locationService = locationService;
+            _loggerService = loggerService;
             _reader = reader;
         }
 
@@ -34,21 +37,18 @@ namespace AdvertisingPlatforms.Controllers
         /// </summary>
         /// <param name="location">Location to search for advertising platforms.</param>
         [HttpGet("{*location}")]
-        [ProducesResponseType<AdvertisingsResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType<AdvertisingPlatformsResult>(StatusCodes.Status200OK)]
         public IActionResult GetAdvertisingPlatforms(string location)
         {
-            string locationName = PrefLocationName + location;
-            var advertisingPlatformsForLocation = _advertisingsInLocationService.GetAdvertisingPlatformsForLocation(locationName);
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetAdvertisingPlatforms));
 
-            if (advertisingPlatformsForLocation is { Count: > 0 })
-            {
-                var okResult = new AdvertisingsResult(advertisingPlatformsForLocation);
-                return Ok(okResult);
-            }
-            else
-            {
-                throw new BusinessException(ErrorConstants.NotFound);
-            }               
+            string locationName = PrefLocationName + location;
+            var advertisingForLocation = _advertisingPlatformService.GetAdvertisingPlatformsForLocation(locationName);
+
+            var okResult = new AdvertisingPlatformsResult(advertisingForLocation!);
+
+            _loggerService.LogEnd(logId);
+            return Ok(okResult);        
         }
 
         /// <summary>
@@ -56,24 +56,21 @@ namespace AdvertisingPlatforms.Controllers
         /// </summary>
         /// <param name="file">File with new advertising data.</param>
         [HttpPost]
-        [ProducesResponseType<AdvertisingUpdateResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType<AdvertisingPlatformsUpdateResult>(StatusCodes.Status200OK)]
         public async Task<IActionResult> ReplaceAdvertisingData(IFormFile file)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceAdvertisingData));
+
             var data = await _reader.GetDataFromFileAsync(file);
 
-            if (data?.AdvertisingPlatforms.Count > 0)
-            {
-                _advertisingsInLocationService.ReplaceRepository(data.AdvertisingInLocations);
-                var countAdvertisingPlatforms = _advertisitngPlatformsService.ReplaceRepository(data.AdvertisingPlatforms);
-                var countLocations = _locationsService.ReplaceRepository(data.Locations);
+            _advertisingPlatformService.ReplaceRepository(data!.AdvertisingPlatforms);
+            var countAdvertising = _advertisingService.ReplaceRepository(data.Advertising);
+            var countLocations = _locationService.ReplaceRepository(data.Locations);
 
-                var okResult = new AdvertisingUpdateResult(countAdvertisingPlatforms, countLocations);
-                return Ok(okResult);
-            }
-            else
-            {
-                throw new BusinessException(ErrorConstants.NoCorrectFileData);
-            }
+            var okResult = new AdvertisingPlatformsUpdateResult(countAdvertising, countLocations);
+
+            _loggerService.LogEnd(logId);
+            return Ok(okResult);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AdvertisingPlatforms.Domain.Models.BaseModels;
+﻿using AdvertisingPlatforms.Domain.Interfaces.Services;
+using AdvertisingPlatforms.Domain.Models.BaseModels;
 
 namespace AdvertisingPlatforms.DAL.Interfaces
 {
@@ -14,6 +15,5 @@ namespace AdvertisingPlatforms.DAL.Interfaces
         /// <param name="filePath">Path to file.</param>
         /// <returns>Data from repository.</returns>
         public List<TResource> GetAllFromFile<TResource>(string filePath) where TResource : Resource;
-
     }
 }

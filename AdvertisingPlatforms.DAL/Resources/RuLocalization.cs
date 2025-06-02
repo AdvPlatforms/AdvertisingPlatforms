@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using AdvertisingPlatforms.Domain.Exceptions.Base;
+using System.Reflection;
 using System.Resources;
 
 namespace AdvertisingPlatforms.DAL.Resources
@@ -20,9 +21,9 @@ namespace AdvertisingPlatforms.DAL.Resources
         /// </summary>
         /// <param name="message">Message.</param>
         /// <returns>Localized message or string empty for fail.</returns>
-        public static string GetLocalizedMessage(string message)
+        public static string GetLocalizedMessage(BusinessException exception)
         {
-            return ResourceManager.GetString(message) ?? string.Empty;
+            return ResourceManager.GetString(exception.Message) ?? string.Empty;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exeptions;
+using AdvertisingPlatforms.Domain.Exceptions;
+using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models;
 
@@ -13,11 +14,13 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
     {
         private readonly IFileValidator _validator;
         private readonly IFileParser _parser;
+        private readonly ILoggerService _loggerService;
 
-        public FileReader(IFileValidator validator, IFileParser parser)
+        public FileReader(IFileValidator validator, IFileParser parser, ILoggerService loggerService)
         {
             _validator = validator;
             _parser = parser;
+            _loggerService = loggerService;
         }
 
         /// <summary>
@@ -25,9 +28,11 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
         /// </summary>
         /// <param name="file">File with data.</param>
         /// <returns>Data or null.</returns>
-        /// <exception cref="BusinessException"></exception>
+        /// <exception cref="ValidFileContentException"></exception>
         public async Task<AdvertisingInformation?> GetDataFromFileAsync(Microsoft.AspNetCore.Http.IFormFile file)
         {
+            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetDataFromFileAsync));
+
             using StreamReader streamReader = new(file.OpenReadStream());
 
             var fileContent = await streamReader.ReadToEndAsync();
@@ -36,17 +41,18 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
             if (!isValid.result)
             {
-                throw new BusinessException(isValid.error!);                
+                throw new ValidFileContentException(isValid.error!);                
             }
 
             AdvertisingInformation result = _parser.GetParseData(fileContent);
 
-            if (result.AdvertisingPlatforms.Count == 0 ||
+            if (result.Advertising.Count == 0 ||
                 result.Locations.Count == 0) 
             {
-                throw new BusinessException(ErrorConstants.NoCorrectFileData);
+                throw new ValidFileContentException(ErrorConstants.NoCorrectFileData);
             }
 
+            _loggerService.LogEnd(logId);
             return result;
         }
     }
