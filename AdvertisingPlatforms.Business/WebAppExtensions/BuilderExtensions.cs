@@ -14,7 +14,7 @@ namespace AdvertisingPlatforms.WebAppExtensions
     public static class BuilderExtensions
     {
         /// <summary>
-        /// Configure web application builder.
+        /// Configure web application builder(Business).
         /// </summary>
         /// <param name="builder">Builder.</param>
         public static void ConfigureBusiness(this WebApplicationBuilder builder) 

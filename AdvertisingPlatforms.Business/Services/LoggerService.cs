@@ -10,6 +10,9 @@ using System.Security.AccessControl;
 
 namespace AdvertisingPlatforms.Business.Services
 {
+    /// <summary>
+    /// Logger service.
+    /// </summary>
     public class LoggerService : ILoggerService
     {
         private readonly ILogger<LoggerService> _logger;
@@ -24,6 +27,12 @@ namespace AdvertisingPlatforms.Business.Services
             _methodsInfo = new();
         }
 
+        /// <summary>
+        /// Log on start method.
+        /// </summary>
+        /// <param name="objectName">Class name.</param>
+        /// <param name="methodName">Method name</param>
+        /// <returns>Id method in logger service.</returns>
         public int LogStart(string objectName, string methodName)
         {
             _logger.LogInformation("|Start|{objectName}.{methodName}(), RequestID: {_requestId}", objectName, methodName, _requestId);
@@ -31,6 +40,10 @@ namespace AdvertisingPlatforms.Business.Services
             return AddMethod(objectName, methodName);
         }
 
+        /// <summary>
+        /// Log on end method.
+        /// </summary>
+        /// <param name="methodId">Id method in logger service.</param>
         public void LogEnd(int methodId)
         {
             var methodInfo = GetMethod(methodId);
@@ -39,16 +52,31 @@ namespace AdvertisingPlatforms.Business.Services
             _logger.LogInformation("|End|{objectName}.{methodName}(), RequestID: {_requestId}", objectName, methodName, _requestId);
         }
 
+        /// <summary>
+        /// Log for error.
+        /// </summary>
+        /// <param name="exceptionInfo">Information for exception.</param>
         public void LogError(ExceptionInfo exceptionInfo)
         {
             _logger.LogError("{exceptionInfo}, RequestID: {_requestId}", exceptionInfo, _requestId);
         }
 
+        /// <summary>
+        /// Log for information.
+        /// </summary>
+        /// <param name="infoMessage">Information message.</param>
+        /// <param name="objectName">Class name.</param>
+        /// <param name="methodName">Method name</param>
         public void LogInfo(string infoMessage, string objectName, string methodName)
         {
             _logger.LogInformation("|Info|{infoMessage}, {objectName}.{methodName}()", infoMessage,objectName, methodName);
         }
 
+        /// <summary>
+        /// Log for information.
+        /// </summary>
+        /// <param name="infoMessage">Information message.</param>
+        /// <param name="methodId">Id method in logger service.</param>
         public void LogInfo(string infoMessage,int methodId)
         {
             var methodInfo = GetMethod(methodId);
