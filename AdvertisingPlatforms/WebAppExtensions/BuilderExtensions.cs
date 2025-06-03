@@ -17,8 +17,8 @@ namespace AdvertisingPlatforms.WebAppExtensions
         {
             builder.Services.AddControllers();
 
-            builder.Services.AddAdvertisingServices();
             builder.Services.AddRepositoryServices();
+            builder.Services.AddAdvertisingServices();
             builder.Services.AddFileServices();
             builder.Services.AddLogServices();
 

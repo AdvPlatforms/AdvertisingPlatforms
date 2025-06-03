@@ -1,4 +1,5 @@
-﻿using AdvertisingPlatforms.DAL.Interfaces;
+﻿using AdvertisingPlatforms.DAL.Databases.SqlDatabase.Data;
+using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,15 @@ namespace AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories
 {
     public class AdvertisingPlatformSqlRepository : IRepository<AdvertisingPlatform>
     {
+        private AppDbContext _appDbContext;
+        public AdvertisingPlatformSqlRepository(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
+
         public void AddToRepository(AdvertisingPlatform entity)
         {
+            _appDbContext.Add(entity);
             throw new NotImplementedException();
         }
 

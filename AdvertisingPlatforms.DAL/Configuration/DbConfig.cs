@@ -12,6 +12,8 @@ namespace AdvertisingPlatforms.DAL.Configuration
         private static Lazy<string> _advertisingPlatformDbPath;
         private static Lazy<string> _advertisingDbPath;
         private static Lazy<string> _locationDbPath;
+        private static Lazy<string> _connectionString;
+
         private static bool _initialized = false;
 
         /// <summary>
@@ -34,7 +36,14 @@ namespace AdvertisingPlatforms.DAL.Configuration
         public static string LocationDbPath => _initialized 
             ? _locationDbPath.Value 
             : Error(ErrorConstants.ConfigNotInitialized);
-       
+
+        /// <summary>
+        /// Connection string for Sql-database.
+        /// </summary>
+        public static string ConnectionString => _initialized
+            ? _connectionString.Value
+            : Error(ErrorConstants.ConfigNotInitialized);
+
         /// <summary>
         /// Initialize configuration.
         /// </summary>
@@ -44,21 +53,24 @@ namespace AdvertisingPlatforms.DAL.Configuration
             if (_initialized) return;
 
             _advertisingPlatformDbPath = new Lazy<string>(() =>
-                configuration.GetSection("DataBases:AdvertisingPlatform").Value ??
+                configuration.GetSection("FileDataBases:AdvertisingPlatform").Value ??
                 Error(ErrorConstants.ConfigurationRead));
 
             _advertisingDbPath = new Lazy<string>(() =>
-                configuration.GetSection("DataBases:Advertising").Value ??
+                configuration.GetSection("FileDataBases:Advertising").Value ??
                 Error(ErrorConstants.ConfigurationRead));
 
             _locationDbPath = new Lazy<string>(() =>
-                configuration.GetSection("DataBases:Location").Value ??
+                configuration.GetSection("FileDataBases:Location").Value ??
+                Error(ErrorConstants.ConfigurationRead));
+
+            _connectionString = new Lazy<string>(() =>
+                configuration.GetSection("SqlDataBases:ConnectionStrings:Default").Value ??
                 Error(ErrorConstants.ConfigurationRead));
 
             _initialized = true;
         }
 
         private static string Error(string message) => throw new ConfigurationReadException(message);
-
     }
 }
