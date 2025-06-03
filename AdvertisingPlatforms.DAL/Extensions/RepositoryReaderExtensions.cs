@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 using System.Text.Json;
-using AdvertisingPlatforms.DAL.FileAccess;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using System.Runtime.CompilerServices;
 using AdvertisingPlatforms.DAL.Const;
+using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess;
 
 namespace AdvertisingPlatforms.DAL.Extensions
 {

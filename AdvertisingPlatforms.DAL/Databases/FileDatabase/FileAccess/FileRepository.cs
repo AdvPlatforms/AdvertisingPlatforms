@@ -4,7 +4,7 @@ using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Models;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
-namespace AdvertisingPlatforms.DAL.FileAccess
+namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess
 {
     /// <summary>
     /// Repository for working with files.

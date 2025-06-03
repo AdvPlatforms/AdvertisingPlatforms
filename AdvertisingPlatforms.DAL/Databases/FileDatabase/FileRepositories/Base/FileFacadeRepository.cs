@@ -1,22 +1,22 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
-using AdvertisingPlatforms.DAL.FileAccess;
+using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess;
 using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
-namespace AdvertisingPlatforms.DAL.Repositories.Base
+namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileRepositories.Base
 {
     /// <summary>
     /// Facade for work with FileRepository, RepositoryReader, RepositoryWriter.
     /// </summary>
     /// <typeparam name="TResource">Resource.</typeparam>
-    public class Repository<TResource> where TResource: Resource
+    public abstract class FileFacadeRepository<TResource> :IRepository<TResource> where TResource: Resource 
     {
         private readonly FileRepository<TResource> _fileRepository;
         private readonly IRepositoryReader _repositoryReader;
         private readonly IRepositoryWriter _repositoryWriter;
         private readonly ILoggerService _loggerService;
-        public Repository(
+        public FileFacadeRepository(
             IRepositoryReader repositoryReader, 
             IRepositoryWriter repositoryWriter, 
             ILoggerService loggerService)
@@ -46,7 +46,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity"></param>
         public void AddToRepository(TResource entity)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(AddToRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(AddToRepository));
             _fileRepository.AddToRepository(entity, _repositoryReader, _repositoryWriter);
             _loggerService.LogEnd(logId);
         }
@@ -57,7 +57,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="id">id of entity.</param>
         public void DeleteFromRepository(int id)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(DeleteFromRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(DeleteFromRepository));
             _fileRepository.DeleteFromRepository(id, _repositoryReader, _repositoryWriter);
             _loggerService.LogEnd(logId);
         }
@@ -68,7 +68,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public IEnumerable<TResource>? GetAllFromRepository()
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetAllFromRepository(_repositoryReader);
 
             _loggerService.LogEnd(logId);
@@ -82,7 +82,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>Entity for success, null for fail.</returns>
         public TResource? GetByIdFromRepository(int id)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetByIdFromRepository(id, _repositoryReader);
 
             _loggerService.LogEnd(logId);
@@ -96,7 +96,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public List<TResource> GetByIdFromRepository(IEnumerable<int> ids)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByIdFromRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(GetByIdFromRepository));
             var result = _fileRepository.GetByIdFromRepository(ids, _repositoryReader);
 
             _loggerService.LogEnd(logId);
@@ -110,7 +110,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <returns>List of entities for success, null for fail.</returns>
         public TResource? GetByNameFromRepository(string name)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(GetByNameFromRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(GetByNameFromRepository));
             var result = _fileRepository.GetByNameFromRepository(name, _repositoryReader);
 
             _loggerService.LogEnd(logId);
@@ -123,7 +123,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entities">New entities for overwrite repository.</param>
         public void ReplaceRepository(IReadOnlyList<TResource> entities)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(ReplaceRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(ReplaceRepository));
             _fileRepository.ReplaceRepository(entities, _repositoryWriter);
             _loggerService.LogEnd(logId);
         }
@@ -134,7 +134,7 @@ namespace AdvertisingPlatforms.DAL.Repositories.Base
         /// <param name="entity">Entity for update.</param>
         public void UpdateInRepository(TResource entity)
         {
-            var logId = _loggerService.LogStart(this.GetType().Name, nameof(UpdateInRepository));
+            var logId = _loggerService.LogStart(GetType().Name, nameof(UpdateInRepository));
             _fileRepository.UpdateInRepository(entity, _repositoryReader, _repositoryWriter);
             _loggerService.LogEnd(logId);
         }

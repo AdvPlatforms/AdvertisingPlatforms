@@ -1,5 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.DAL.Repositories.Base;
+using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
@@ -11,13 +11,13 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     /// </summary>
     public class AdvertisingPlatformService : IAdvertisingPlatformService
     {
-        private readonly Repository<AdvertisingPlatform> _advertisingPlatformRepository;
+        private readonly IRepository<AdvertisingPlatform> _advertisingPlatformRepository;
         private readonly IAdvertisingService _advertisingService;
         private readonly ILocationService _locationService;
         private readonly ILoggerService _loggerService;
 
         public AdvertisingPlatformService(
-            Repository<AdvertisingPlatform> advertisingPlatformRepository,
+            IRepository<AdvertisingPlatform> advertisingPlatformRepository,
             IAdvertisingService advertisingService,
             ILocationService locationService,
             ILoggerService loggerService)

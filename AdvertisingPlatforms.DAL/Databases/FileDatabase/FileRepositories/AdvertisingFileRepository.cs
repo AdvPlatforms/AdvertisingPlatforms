@@ -1,14 +1,14 @@
-﻿using AdvertisingPlatforms.DAL.Interfaces;
-using AdvertisingPlatforms.DAL.Repositories.Base;
+﻿using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileRepositories.Base;
+using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
 
-namespace AdvertisingPlatforms.DAL.Repositories
+namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileRepositories
 {
     /// <summary>
     /// Repository of advertisingPlatforms for working with a json file.
     /// </summary>
-    public class AdvertisingFileRepository : Repository<Advertising>
+    public class AdvertisingFileRepository : FileFacadeRepository<Advertising>
     {
         /// <summary>
         /// Create repository for advertising platforms.

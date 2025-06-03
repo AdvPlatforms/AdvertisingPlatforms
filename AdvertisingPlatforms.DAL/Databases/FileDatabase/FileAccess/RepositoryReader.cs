@@ -5,7 +5,7 @@ using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 
-namespace AdvertisingPlatforms.DAL.FileAccess
+namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess
 {
     public class RepositoryReader : IRepositoryReader
     {

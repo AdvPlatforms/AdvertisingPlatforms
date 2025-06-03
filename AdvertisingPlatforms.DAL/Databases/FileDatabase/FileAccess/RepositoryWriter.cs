@@ -4,7 +4,7 @@ using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 using System.Text.Json;
 
-namespace AdvertisingPlatforms.DAL.FileAccess
+namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess
 {
     public class RepositoryWriter : IRepositoryWriter
     {

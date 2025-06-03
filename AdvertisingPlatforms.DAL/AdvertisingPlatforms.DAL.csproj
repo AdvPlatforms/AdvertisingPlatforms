@@ -7,19 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="AdvertisingJsonDbs\AdvertisingPlatformDb.json">
+    <Content Include="Databases\FileDatabase\Data\AdvertisingJsonDbs\AdvertisingPlatformDb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="AdvertisingJsonDbs\AdvertisingDb.json">
+    <Content Include="Databases\FileDatabase\Data\AdvertisingJsonDbs\AdvertisingDb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="AdvertisingJsonDbs\LocationDb.json">
+    <Content Include="Databases\FileDatabase\Data\AdvertisingJsonDbs\LocationDb.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Repositories\AdvertisingPlatformFileRepository.cs" />
+    <None Include="Databases\FileDatabase\FileRepositories\AdvertisingPlatformFileRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.16">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
 
 </Project>

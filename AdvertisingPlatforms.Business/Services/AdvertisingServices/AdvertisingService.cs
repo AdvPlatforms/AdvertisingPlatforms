@@ -1,5 +1,4 @@
-﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.DAL.Repositories.Base;
+﻿using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models;
 
@@ -11,10 +10,10 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
     /// </summary>
     public class AdvertisingService : IAdvertisingService
     {
-        private readonly Repository<Advertising> _advertisingRepository;
+        private readonly IRepository<Advertising> _advertisingRepository;
         private readonly ILoggerService _loggerService;
 
-        public AdvertisingService(Repository<Advertising> advertisingRepository,
+        public AdvertisingService(IRepository<Advertising> advertisingRepository,
             ILoggerService loggerService)
         {
             _advertisingRepository = advertisingRepository;
