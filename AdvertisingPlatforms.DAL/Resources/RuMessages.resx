@@ -168,4 +168,7 @@
   <data name="Couldn't get information about the method by id." xml:space="preserve">
     <value>Не удалось получить информацию о методе по id.</value>
   </data>
+  <data name="Repository error. Unknown data type." xml:space="preserve">
+    <value>Ошибка репозитория. Неизвестный тип данных.</value>
+  </data>
 </root>

@@ -95,9 +95,7 @@ namespace AdvertisingPlatforms.Business.Services.AdvertisingServices
             var logId = _loggerService.LogStart(this.GetType().Name, nameof(Update));
             _advertisingRepository.UpdateInRepository(advertising);
 
-            _loggerService.LogEnd(logId);
-
-            
+            _loggerService.LogEnd(logId);           
         }
 
         /// <summary>

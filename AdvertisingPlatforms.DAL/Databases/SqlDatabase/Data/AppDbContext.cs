@@ -1,11 +1,6 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
 using AdvertisingPlatforms.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdvertisingPlatforms.DAL.Databases.SqlDatabase.Data
 {

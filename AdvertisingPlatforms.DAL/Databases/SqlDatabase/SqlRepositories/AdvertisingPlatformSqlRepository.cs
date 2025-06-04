@@ -1,61 +1,27 @@
 ﻿using AdvertisingPlatforms.DAL.Databases.SqlDatabase.Data;
-using AdvertisingPlatforms.DAL.Interfaces;
+using AdvertisingPlatforms.DAL.Databases.SqlDatabase.Models;
+using AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories.Base;
 using AdvertisingPlatforms.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories
 {
-    public class AdvertisingPlatformSqlRepository : IRepository<AdvertisingPlatform>
+    public class AdvertisingPlatformSqlRepository : BaseSqlRepository<AdvertisingPlatform>
     {
-        private AppDbContext _appDbContext;
-        public AdvertisingPlatformSqlRepository(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext;
-        }
+        public AdvertisingPlatformSqlRepository(AppDbContext appDbContext): base(appDbContext) { }
 
-        public void AddToRepository(AdvertisingPlatform entity)
+        public override void ReplaceRepository(IReadOnlyList<AdvertisingPlatform> entities)
         {
-            _appDbContext.Add(entity);
-            throw new NotImplementedException();
-        }
+            _entitiesOfRepository?.RemoveRange(_entitiesOfRepository);
 
-        public void DeleteFromRepository(int id)
-        {
-            throw new NotImplementedException();
-        }
+            var sub = entities.Select(x=> new AdvertisingPlatformForSqlDb(
+                x.Id,
+                x.LocationId,
+                x.AdvertisingIds.ToList()));
 
-        public IEnumerable<AdvertisingPlatform>? GetAllFromRepository()
-        {
-            throw new NotImplementedException();
-        }
+             _entitiesOfRepository?.AddRange(sub);
 
-        public AdvertisingPlatform? GetByIdFromRepository(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<AdvertisingPlatform> GetByIdFromRepository(IEnumerable<int> ids)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AdvertisingPlatform? GetByNameFromRepository(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceRepository(IReadOnlyList<AdvertisingPlatform> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateInRepository(AdvertisingPlatform entity)
-        {
-            throw new NotImplementedException();
+             int a = _appDbContext.SaveChanges();          
         }
     }
 }

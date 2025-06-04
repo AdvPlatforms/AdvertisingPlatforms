@@ -1,6 +1,4 @@
-﻿using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.Domain.Exceptions;
-using AdvertisingPlatforms.Domain.Interfaces.Services;
+﻿using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models.ResponseApi;
 using Microsoft.AspNetCore.Mvc;

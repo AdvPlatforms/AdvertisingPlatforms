@@ -1,9 +1,6 @@
-﻿using AdvertisingPlatforms.DAL.Repositories;
-using AdvertisingPlatforms.Domain.Models;
+﻿using AdvertisingPlatforms.Domain.Models;
 using AdvertisingPlatforms.DAL.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess;
-using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileRepositories;
 using AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories;
 using AdvertisingPlatforms.DAL.Databases.SqlDatabase.Data;
 

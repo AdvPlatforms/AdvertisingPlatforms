@@ -1,4 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Databases.SqlDatabase.Data;
+using AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories.Base;
 using AdvertisingPlatforms.DAL.Interfaces;
 using AdvertisingPlatforms.Domain.Models;
 using System;
@@ -9,53 +10,8 @@ using System.Threading.Tasks;
 
 namespace AdvertisingPlatforms.DAL.Databases.SqlDatabase.SqlRepositories
 {
-    public class AdvertisingSqlRepository : IRepository<Advertising>
+    public class AdvertisingSqlRepository : BaseSqlRepository<Advertising>
     {
-        private AppDbContext _appDbContext;
-
-        public AdvertisingSqlRepository(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext;
-        }
-
-        public void AddToRepository(Advertising entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteFromRepository(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Advertising>? GetAllFromRepository()
-        {
-            return _appDbContext.Advertisings.ToList();
-        }
-
-        public Advertising? GetByIdFromRepository(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Advertising> GetByIdFromRepository(IEnumerable<int> ids)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Advertising? GetByNameFromRepository(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceRepository(IReadOnlyList<Advertising> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateInRepository(Advertising entity)
-        {
-            throw new NotImplementedException();
-        }
+        public AdvertisingSqlRepository(AppDbContext appDbContext): base(appDbContext) { }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
+using AdvertisingPlatforms.DAL.Const;
 using AdvertisingPlatforms.DAL.Databases.FileDatabase.FileAccess;
 using AdvertisingPlatforms.DAL.Interfaces;
+using AdvertisingPlatforms.Domain.Exceptions;
 using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Models.BaseModels;
 
@@ -36,7 +38,7 @@ namespace AdvertisingPlatforms.DAL.Databases.FileDatabase.FileRepositories.Base
                 "Location" => DbConfig.LocationDbPath,
                 "Advertising" => DbConfig.AdvertisingDbPath,
                 "AdvertisingPlatform" => DbConfig.AdvertisingPlatformDbPath,
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new RepositoryException(ErrorConstants.RepositoryTypeEntities)
             };
         }
 

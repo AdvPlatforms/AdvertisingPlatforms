@@ -3,7 +3,6 @@ using AdvertisingPlatforms.Domain.Interfaces.Services;
 using AdvertisingPlatforms.Domain.Interfaces.Services.FileHandling;
 using AdvertisingPlatforms.Domain.Models;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 {
@@ -32,24 +31,24 @@ namespace AdvertisingPlatforms.Business.Services.FileHandlingServices
 
             var sortFileContent = GetSortFileContent(fileContent).ToDictionary();
 
-            var advertisingPlatforms = GetAdvertising(sortFileContent);
+            var advertising = GetAdvertising(sortFileContent);
 
             var locations = sortFileContent
                 .Select((x, Index) => new Location(Index + 1) { Name = x.Key });
 
-            var advertisingInLocations =
-                GetAdvertisingInLocations(sortFileContent, advertisingPlatforms, locations);
+            var advertisingPlatforms =
+                GetAdvertisingPlatforms(sortFileContent, advertising, locations);
 
             var result = new AdvertisingInformation(
-                advertisingInLocations.ToList(),
                 advertisingPlatforms.ToList(),
+                advertising.ToList(),
                 locations.ToList());
 
             _loggerService.LogEnd(logId);
             return result;
         }
 
-        private IEnumerable<AdvertisingPlatform> GetAdvertisingInLocations(
+        private IEnumerable<AdvertisingPlatform> GetAdvertisingPlatforms(
               IEnumerable<KeyValuePair<string,
               IEnumerable<string>>> sortFileContent, 
               IEnumerable<Advertising> advertisingPlatforms, IEnumerable<Location> locations)

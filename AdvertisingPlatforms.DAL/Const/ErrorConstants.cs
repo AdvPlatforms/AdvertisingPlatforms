@@ -21,5 +21,6 @@
         public const string ConfigurationRead = "Couldn't read data from configuration file.";
         public const string ConfigNotInitialized = "Configuration service has not been initialized.";
         public const string LoggerService = "Couldn't get information about the method by id.";
+        public const string RepositoryTypeEntities = "Repository error. Unknown data type.";
     }
 }
