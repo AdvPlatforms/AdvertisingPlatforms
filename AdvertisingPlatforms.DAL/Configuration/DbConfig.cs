@@ -13,6 +13,7 @@ namespace AdvertisingPlatforms.DAL.Configuration
         private static Lazy<string> _advertisingDbPath;
         private static Lazy<string> _locationDbPath;
         private static Lazy<string> _connectionString;
+        private static Lazy<string> _databaseType;
 
         private static bool _initialized = false;
 
@@ -45,6 +46,13 @@ namespace AdvertisingPlatforms.DAL.Configuration
             : Error(ErrorConstants.ConfigNotInitialized);
 
         /// <summary>
+        /// Database type. Value: "File" or "Sql".
+        /// </summary>
+        public static string DatabaseType => _initialized
+            ? _databaseType.Value
+            : Error(ErrorConstants.ConfigNotInitialized);
+
+        /// <summary>
         /// Initialize configuration.
         /// </summary>
         /// <param name="configuration">Configuration.</param>
@@ -66,6 +74,10 @@ namespace AdvertisingPlatforms.DAL.Configuration
 
             _connectionString = new Lazy<string>(() =>
                 configuration.GetSection("SqlDataBases:ConnectionStrings:Default").Value ??
+                Error(ErrorConstants.ConfigurationRead));
+
+            _databaseType = new Lazy<string>(() =>
+                configuration.GetSection("DataBaseType").Value ??
                 Error(ErrorConstants.ConfigurationRead));
 
             _initialized = true;

@@ -1,6 +1,4 @@
-﻿using AdvertisingPlatforms.Business.ServiceCollection;
-using AdvertisingPlatforms.DAL.ServiceCollection;
-using AdvertisingPlatforms.ServiceCollection;
+﻿using AdvertisingPlatforms.ServiceCollection;
 
 namespace AdvertisingPlatforms.WebAppExtensions
 {
@@ -15,12 +13,7 @@ namespace AdvertisingPlatforms.WebAppExtensions
         /// <param name="builder">Builder.</param>
         public static void ConfigureBuilder(this WebApplicationBuilder builder) 
         {
-            builder.Services.AddControllers();
-
-            builder.Services.AddRepositoryServices();
-            builder.Services.AddAdvertisingServices();
-            builder.Services.AddFileServices();
-            builder.Services.AddLogServices();
+            builder.ConfigureBuilderDal();
 
             builder.ConfigureBusiness();
 
@@ -28,7 +21,6 @@ namespace AdvertisingPlatforms.WebAppExtensions
             {
                 builder.Services.AddSwaggerServices();
             }
-
         }
     }
 }
