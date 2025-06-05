@@ -10,6 +10,7 @@ namespace AdvertisingPlatforms
             builder.ConfigureBuilder();
 
             var app = builder.Build();
+
             app.ConfigureApp();
 
             app.Run();
