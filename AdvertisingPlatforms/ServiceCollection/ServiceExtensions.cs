@@ -1,6 +1,4 @@
-﻿using AdvertisingPlatforms.Business.ServiceCollection;
-using AdvertisingPlatforms.DAL.ServiceCollection;
-namespace AdvertisingPlatforms.ServiceCollection
+﻿namespace AdvertisingPlatforms.ServiceCollection
 {
     /// <summary>
     /// Extensions for service collection.
@@ -8,17 +6,11 @@ namespace AdvertisingPlatforms.ServiceCollection
     public static class ServiceExtensions
     {
         /// <summary>
-        /// Method for registration file services
+        /// Method for registration swagger service
         /// </summary>
         public static void AddSwaggerServices(this IServiceCollection services)
         {
-            services.AddControllers();
             services.AddEndpointsApiExplorer();
-
-            services.AddRepositoryServices();
-            services.AddAdvertisingServices();
-            services.AddFileServices();
-            services.AddLogServices();
 
             services.AddSwaggerGen(options =>
             {
@@ -30,6 +22,15 @@ namespace AdvertisingPlatforms.ServiceCollection
                 var xmlPathDomain = Path.Combine(AppContext.BaseDirectory, xmlFileDomain);
                 options.IncludeXmlComments(xmlPathDomain);
             });
+        }
+
+        /// <summary>
+        /// Method for registration service
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddWebServices(this IServiceCollection services)
+        {
+            services.AddControllers();            
         }
     }
 }

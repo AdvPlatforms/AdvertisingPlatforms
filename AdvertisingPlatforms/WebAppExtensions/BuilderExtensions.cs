@@ -13,8 +13,9 @@ namespace AdvertisingPlatforms.WebAppExtensions
         /// <param name="builder">Builder.</param>
         public static void ConfigureBuilder(this WebApplicationBuilder builder) 
         {
-            builder.ConfigureBuilderDal();
+            builder.Services.AddWebServices();
 
+            builder.ConfigureBuilderDal();               
             builder.ConfigureBusiness();
 
             if (builder.Environment.IsDevelopment())

@@ -1,8 +1,6 @@
 ﻿using AdvertisingPlatforms.Business.ServiceCollection;
 using AdvertisingPlatforms.DAL.Const;
-using AdvertisingPlatforms.DAL.ServiceCollection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 
@@ -29,7 +27,11 @@ namespace AdvertisingPlatforms.WebAppExtensions
                     rollingInterval: RollingInterval.Day,
                     retainedFileCountLimit: 7,
                     outputTemplate: LoggerConstants.OutputTemplate
-                ));            
+                ));
+
+            builder.Services.AddAdvertisingServices();
+            builder.Services.AddFileServices();
+            builder.Services.AddLogServices();
         }
     }
 }

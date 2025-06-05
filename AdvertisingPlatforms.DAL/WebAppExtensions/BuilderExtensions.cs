@@ -1,4 +1,5 @@
 ﻿using AdvertisingPlatforms.DAL.Configuration;
+using AdvertisingPlatforms.DAL.ServiceCollection;
 using Microsoft.AspNetCore.Builder;
 
 
@@ -16,6 +17,8 @@ namespace AdvertisingPlatforms.WebAppExtensions
         public static void ConfigureBuilderDal(this WebApplicationBuilder builder) 
         {
             DbConfig.Initialize(builder.Configuration);
+
+            builder.Services.AddRepositoryServices();
         }
     }
 }
